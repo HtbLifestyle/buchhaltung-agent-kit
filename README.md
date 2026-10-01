@@ -8,7 +8,10 @@ gegenprüfen — mit Regelwerk, Quality Gates, Audit und Eval.
 liegt im jeweiligen Mandantenprojekt unter `.claude/docs/COMPANY_CONTEXT.md`. Dasselbe Kit
 bedient beliebig viele Unternehmen.
 
-> Status: **Fundament** (v0.1.0). Regelwerk und Verträge stehen, Agenten und Skills folgen.
+> Status: **vollständig angelegt** (v0.2.0). Alle Phasen, Gates, Hooks und Agenten sind
+> beschrieben. Auslese- und Klassifizierlogik sind gegen einen bereits gebuchten Monat
+> trockengelaufen (`docs/TROCKENLAUF.md`); die Schreibphase ist noch nicht im Echtbetrieb
+> erprobt.
 
 ---
 
@@ -16,14 +19,18 @@ bedient beliebig viele Unternehmen.
 
 Automatisiert: sammeln, auslesen, klassifizieren, erfassen, abgleichen, prüfen.
 
-Beim Menschen, erzwungen durch Hooks und Regeln:
+Beim Menschen:
 
-| Punkt | Regel |
-|---|---|
-| Portal-Logins | P-02 |
-| Übermittlung der Voranmeldung | P-01 |
-| Belege löschen | P-03 |
-| Entscheidungen bei Ermessensfragen | — Entscheidungsvorlagen am Ende der Klassifizierung |
+| Punkt | Regel | Wie abgesichert |
+|---|---|---|
+| Portal-Logins | P-02 | Anweisung; gebündelte Anforderung in `sammeln` |
+| Übermittlung der Voranmeldung | P-01 | **Hook** auf Navigation + Prüfung im Audit |
+| Belege löschen oder umbenennen | P-03, P-05 | **Hook** auf Bash/Write/Edit |
+| Entscheidungen bei Ermessensfragen | — | Entscheidungsvorlagen am Ende der Klassifizierung |
+
+Was ein Hook durchsetzt und was nur angewiesen werden kann, steht in
+[`hooks/README.md`](hooks/README.md) — Hooks sehen die Eingabe eines Tool-Aufrufs, und ein
+Klick in einer Oberfläche enthält nur Koordinaten. Das ist offengelegt statt überspielt.
 
 ---
 
@@ -67,8 +74,12 @@ aus** statt sie zu erfragen, nimmt Ordner, Zahlungsquellen und Lieferanten auf u
 | 5 Audit | `monats-auditor` | **Agent** |
 | 6 Eval | `agent-evaluator` | **Agent** |
 
-Weitere Skills: `nachtrag` (Spätbelege), `korrektur` (berichtigte Anmeldung), `audit`,
-`regelwerk`.
+```
+/buchhaltung-kit:nachtrag          # offene Punkte abarbeiten, Zeitraum zuordnen
+/buchhaltung-kit:korrektur 2026-09 # bereits übermittelter Zeitraum: Differenz vorbereiten
+/buchhaltung-kit:audit 2026-09     # unabhängige Nachprüfung, --eval für die Pipeline
+/buchhaltung-kit:regelwerk         # Regeln nachschlagen
+```
 
 ---
 
@@ -95,6 +106,8 @@ Deshalb sind Sammeln, Erfassen und Abgleich Skills — und nur fünf Rollen Agen
 | `docs/RUNDUNGSMODELL.md` | Wie Kennziffern gerundet werden — Grundlage für Gate D. |
 | `docs/LEXOFFICE_UI.md` | Bedienwissen zum Buchhaltungssystem. |
 | `docs/LIEFERANTEN_MUSTER.md` | Erkennungsmuster für Lieferantentypen — **ohne Namen**. |
+| `docs/TROCKENLAUF.md` | Wie gegen einen bereits gebuchten Monat geprüft wird. |
+| `hooks/README.md` | Welche Regeln ein Hook durchsetzt — und welche nicht. |
 
 ### Keine Mandantendaten im Plugin
 

@@ -120,6 +120,13 @@ Achte auf den Spaltenabstand: in Layout-Text stehen Label und Wert oft über 100
 auseinander. Siehst du das Label, aber keinen Wert daneben, lies die **ganze Zeile**, bevor du
 `null` schreibst.
 
+Steht hinter dem Label gar nichts mehr, ist der Wert in eine der Folgezeilen umgebrochen —
+oft mit einer Leerzeile dazwischen. Dort nachsehen, aber nur dann: Folgt auf das Label
+Fließtext („den Rechnungsbetrag buchen wir ab"), gehört keine Zahl der Umgebung dazu.
+
+`Gesamtbetrag netto` ist nicht der Gesamtbetrag. Ein einschränkendes Wort zwischen Label und
+Zahl (`netto`, `excl.`, `ohne`) macht die Zeile zur Teilsumme.
+
 Prüfe gegen: Summe der Positionen plus Steuer muss den Gesamtbetrag ergeben. Geht es nicht
 auf, ist mindestens eines der Felder falsch — melden statt beschönigen.
 

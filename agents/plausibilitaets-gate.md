@@ -83,6 +83,18 @@ numerische Datumsangaben (G-07) schleusen regelmäßig Belege aus anderen Monate
 Prüfe gegen einen zweiten Anhaltspunkt: Dateiname, Leistungszeitraum im Text, Ablageort.
 Widersprechen sie sich, ist das blockierend.
 
+### 4d. Ein Lieferant, eine Behandlung (E-16)
+
+Gruppiere die Belege nach USt-IdNr. des Leistenden und vergleiche die Behandlungen je Gruppe.
+Zwei verschiedene Behandlungen desselben Leistenden im selben Zeitraum sind ein Prüffall —
+ausnahmslos.
+
+Diese Prüfung braucht kein Steuerwissen und kostet nichts, und sie findet genau die Fälle, die
+sonst durchrutschen: Ein Beleg desselben Anbieters, dem ein Pflichtvermerk fehlt, wird anders
+eingestuft als seine Geschwister (E-15).
+
+Melde die Gruppe mit allen Dateien und Behandlungen. Entscheide nicht, welche richtig ist.
+
 ### 4c. Nicht gelesene Belege (B-05)
 
 Zähle die Dokumente im Ordner gegen die ausgewerteten. Jede Differenz ist zu erklären.

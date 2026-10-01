@@ -1,7 +1,7 @@
 # Regelwerk — Umsatzsteuer-Voranmeldung
 
 ```
-REGELWERK_VERSION: 1
+REGELWERK_VERSION: 3
 STAND: 2026-10
 GELTUNG: Deutschland, Regelbesteuerung
 ```
@@ -93,6 +93,13 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   **letzte** Vorkommen, weil der Endbetrag am Belegende steht.
 - **zusatz:** In Layout-Text stehen Label und Wert regelmäßig über 100 Spalten auseinander.
   Ein enges Suchfenster hinter dem Label findet den Wert nicht und liefert still `null`.
+- **umbruch:** Steht hinter dem Label nichts mehr, ist der Wert in eine der **Folgezeilen**
+  umgebrochen — oft mit einer Leerzeile dazwischen. Dort nachsehen, aber **nur** in diesem
+  Fall: Steht hinter dem Label Fließtext („den Rechnungsbetrag buchen wir ab"), zieht ein
+  Blick in die nächste Zeile beliebige fremde Zahlen an.
+- **qualifizierte_label:** `Gesamtbetrag netto` ist nicht der Gesamtbetrag. Steht zwischen
+  Label und erster Zahl ein einschränkendes Wort (`netto`, `net`, `excl.`, `ohne`), ist es
+  eine Teilsumme und scheidet aus.
 - **gegenprobe:** Netto + Steuer je Satz muss den gefundenen Betrag ergeben. Geht es nicht
   auf, ist der Betrag nicht bestätigt.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
@@ -131,12 +138,25 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **regel:** Deutscher Lieferant mit deutscher USt-IdNr./Steuernummer und ausgewiesener
   Steuer → Vorsteuerabzug im Regelsatz oder ermäßigten Satz.
 - **folge:** Vorsteuer in die Kennziffer für abziehbare Vorsteuer.
+- **kein_default:** Ein inländischer Beleg **ohne** ausgewiesene Steuer ist keine
+  Regelsatzleistung. Weist er 0 % aus, ist nichts abzuziehen — ein unterstellter Regelsatz
+  erzeugt Vorsteuer, die nie berechnet wurde.
+- **pruefung:** Nur ein Satz, zu dem ein Steuerbetrag **ungleich null** gehört, ist wirksam.
+  Rechnungsvorlagen führen regelmäßig eine ermäßigte Zeile mit `0,00` mit, ohne dass ein
+  ermäßigter Umsatz vorliegt.
+- **belegt:** In einem realen Monat wiesen die meisten Inlandsbelege ausschließlich 0 % aus
+  (Parkgebühren). Ein Default auf den Regelsatz hätte Vorsteuer aus dem Nichts gezogen —
+  der einzige Fehlertyp in diesem Regelwerk, der nicht formell, sondern materiell ist.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
-### E-02 Ermäßigter Satz erkennen
+### E-02 Steuersatz vom Beleg, mehrere Sätze getrennt
 - **regel:** Bücher, Zeitschriften und Personenbeförderung unterliegen dem ermäßigten Satz.
   Buchhaltungssysteme schlagen häufig den Regelsatz vor.
 - **pruefung:** Steuersatz **vom Beleg** übernehmen, nicht den Vorschlag bestätigen.
+- **mehrere_saetze:** Trägt ein Beleg mehrere wirksame Sätze, wird er **je Satz getrennt**
+  erfasst, nie auf einen Satz zusammengezogen. Zusammenziehen verschiebt die
+  Bemessungsgrundlagen zwischen den Kennziffern, ohne die Summe zu verändern — und bleibt
+  dadurch im Abgleich unsichtbar.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### E-03 Reverse Charge bei Leistungen aus dem EU-Ausland
@@ -171,6 +191,35 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **wirkung:** Ein falscher Satz bleibt zahllastneutral, weil Erwerbsteuer und Vorsteuer
   gegengleich laufen — aber die Kennziffern der Voranmeldung sind falsch. Das macht den
   Fehler leise und damit gefährlich.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### E-15 Reverse Charge ohne ausdrücklichen Hinweis
+- **regel:** Die Steuerschuldnerschaft des Leistungsempfängers folgt aus dem **Sachverhalt**,
+  nicht aus der Formulierung auf dem Beleg. Fehlt der Hinweis, ändert das die Behandlung
+  nicht — es macht die Rechnung formell mangelhaft.
+- **pruefung:** Die Konstellation statt des Wortlauts:
+  1. Leistender ist nicht im Inland ansässig (ausländische USt-IdNr. oder Anschrift),
+  2. der Beleg weist **keine deutsche Umsatzsteuer** aus,
+  3. die **eigene USt-IdNr.** des Leistungsempfängers steht auf dem Beleg.
+- **folge:** Reverse Charge wie E-03 (EU) bzw. E-04 (Drittland). Zusätzlich Hinweis auf den
+  fehlenden Pflichtvermerk (E-07) — melden, nicht beanstanden, denn der Abzug hängt bei
+  gegengleichen Positionen nicht daran.
+- **grenze:** Lässt sich die Ansässigkeit des Leistenden nicht feststellen, ist die Zuordnung
+  zu EU oder Drittland **offen** (`§13b_verdacht`) und wird vorgelegt. Die Kennziffern
+  unterscheiden sich, die Zahllast nicht.
+- **belegt:** In einem realen Monat trugen einige Reverse-Charge-Belege keinen
+  Hinweis — darunter einer von einem Lieferanten, dessen übrige Rechnungen desselben Monats
+  ihn trugen. Eine Erkennung über den Wortlaut hätte sie als nicht abzugsfähige Ausgaben
+  behandelt.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### E-16 Ein Lieferant, eine Behandlung
+- **regel:** Derselbe Leistende im selben Zeitraum mit zwei verschiedenen Behandlungen ist
+  ein Prüffall — ausnahmslos.
+- **pruefung:** Belege nach USt-IdNr. des Leistenden gruppieren und die Behandlungen je
+  Gruppe vergleichen. Die Prüfung braucht kein Steuerwissen und kostet nichts.
+- **folge:** Abweichung melden. Entweder unterscheidet sich der Sachverhalt tatsächlich
+  (dann ist die Begründung zu nennen), oder einer der Belege ist falsch eingestuft.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### E-06 Marktplatzbelege einzeln lesen
@@ -412,3 +461,4 @@ Fachliche Zuordnung:
 |---|---|---|
 | 1 | 2026-10 | Erstfassung, abgeleitet aus einem realen Monatslauf |
 | 2 | 2026-10 | G-07 ergänzt sowie G-08, G-09, B-05 und E-05 `satz_nicht_vom_beleg` aufgenommen — alle vier aus Befunden eines Trockenlaufs gegen einen bereits gebuchten Monat |
+| 3 | 2026-10 | Zweiter Trockenlauf gegen einen anderen Monat: E-15 (Reverse Charge ohne Hinweis) und E-16 (ein Lieferant, eine Behandlung) neu; E-01 um das Verbot des Regelsatz-Defaults, E-02 um die getrennte Erfassung mehrerer Sätze und G-08 um Zeilenumbruch und qualifizierte Label erweitert |

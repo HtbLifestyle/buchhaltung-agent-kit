@@ -40,14 +40,40 @@ Arbeite diese Kette ab und halte beim ersten Treffer an:
    a) Warenlieferung aus EU, 0 %, Art.-138-Vermerk   -> ig. Erwerb        (E-05)
    b) Leistung aus EU, 0 %, RC-Vermerk               -> § 13b EU          (E-03)
    c) Leistung aus Drittland, RC-Vermerk             -> § 13b Drittland   (E-04)
-   d) Deutscher Steuerausweis                        -> Inlandsvorsteuer  (E-01/E-02)
-   e) Kein Steuerausweis, kein RC-Hinweis            -> kein Abzug        (E-10)
+   d) auslaendischer Leistender, keine dt. Steuer,
+      eigene USt-IdNr. auf dem Beleg, kein Vermerk   -> § 13b             (E-15)
+   e) Deutscher Steuerausweis                        -> Inlandsvorsteuer  (E-01/E-02)
+   f) Kein Steuerausweis, kein RC-Hinweis            -> kein Abzug        (E-10)
 5. Ausgang: Zeitpunkt nach Besteuerungsart           (G-02, A-01)
 6. Querschnitt prüfen: E-07/E-08 formell, E-09 Abzugsfähigkeit, F-01 Währung
 ```
 
 Die Reihenfolge ist nicht beliebig: Ein Marktplatzbeleg kann gleichzeitig Muster M-04 und
 ig. Erwerb sein — maßgeblich ist, was auf **diesem** Beleg steht, nicht die Plattform (E-06).
+
+### Der Wortlaut ist ein Indiz, nicht die Grundlage (E-15)
+
+Reverse Charge folgt aus dem Sachverhalt, nicht aus der Formulierung. Fehlt der Vermerk, ist
+die Rechnung formell mangelhaft — der Sachverhalt bleibt derselbe.
+
+Prüfe die Konstellation: ausländischer Leistender, keine deutsche Steuer ausgewiesen, eigene
+USt-IdNr. auf dem Beleg. Liegt sie vor, ist es § 13b, auch ohne jedes Stichwort. Melde den
+fehlenden Vermerk gesondert.
+
+Lässt sich die Ansässigkeit nicht feststellen, ist die Zuordnung zu EU oder Drittland offen —
+`§13b_verdacht` und vorlegen. Die Kennziffern unterscheiden sich, die Zahllast nicht.
+
+### Kein Default auf den Regelsatz (E-01)
+
+Ein inländischer Beleg ohne ausgewiesene Steuer ist **keine** Regelsatzleistung. Weist er
+0 % aus, ist nichts abzuziehen.
+
+Das ist der einzige Fehlertyp hier, der nicht formell, sondern materiell ist: Ein
+unterstellter Regelsatz zieht Vorsteuer, die nie berechnet wurde.
+
+Zähle nur Sätze, zu denen ein Steuerbetrag **ungleich null** gehört. Eine mitgeführte
+7-%-Zeile mit `0,00` ist eine Vorlagenzeile und kein ermäßigter Umsatz. Tragen mehrere Sätze
+tatsächlich Beträge, erfasse **je Satz getrennt** (E-02).
 
 ### Beim ig. Erwerb steht der Steuersatz nicht auf dem Beleg (E-05)
 

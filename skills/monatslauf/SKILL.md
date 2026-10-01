@@ -1,0 +1,144 @@
+---
+name: monatslauf
+description: "Führt den vollständigen Lauf für einen Voranmeldungszeitraum: sammeln, auslesen, prüfen, klassifizieren, erfassen, abgleichen, auditieren. Mit --trocken wird gerechnet, aber nichts geschrieben. Triggers on: /buchhaltung-kit:monatslauf <YYYY-MM> [--trocken]"
+disable-model-invocation: true
+argument-hint: "<YYYY-MM> [--trocken]"
+---
+
+Du bist der Orchestrator. Führe die Schritte **selbst** aus — delegiere die Orchestrierung
+nicht an einen Agenten. Zwischen den Phasen musst du sehen, entscheiden und notfalls den
+Nutzer fragen; genau deshalb ist das hier eine Skill und kein Subagent.
+
+## Vorbedingungen
+
+`.claude/docs/COMPANY_CONTEXT.md` muss existieren. Fehlt sie, brich ab und verweise auf
+`/buchhaltung-kit:adopt`.
+
+Erstes Argument ist der Zeitraum (`YYYY-MM`, bei Quartalsmeldung der erste Monat des
+Quartals). `--trocken` überspringt Phase 4.
+
+## Phase 0 — Vorlauf
+
+1. Zeitraum und Modus festhalten.
+2. `COMPANY_CONTEXT.md` lesen. **Besteuerungsart, Turnus und Dauerfristverlängerung gegen das
+   System prüfen** — nicht nur die Datei glauben. Ändert sich eines davon, ist das ein
+   Befund, bevor irgendetwas gerechnet wird (G-01).
+3. Meldestatus prüfen: Ist der Zeitraum schon übermittelt? Dann ist dies ein
+   Korrekturvorgang → auf `/buchhaltung-kit:korrektur` verweisen und abbrechen.
+4. `REGELWERK_VERSION` aus Plugin und Context vergleichen. Drift melden.
+5. Laufverzeichnis `.claude/buchhaltung-log/<zeitraum>/` anlegen, `00-lauf.md` schreiben:
+   Zeitraum, Modus, Besteuerungsart, Regelwerk-Version, Startzeit.
+
+## Phase 1 — Sammeln
+
+Rufe die `sammeln`-Skill für den Zeitraum auf. Sie erzeugt `10-soll-liste.md` und, falls
+nötig, `05-login-bedarf.md`.
+
+### Gate A — Vollständigkeit
+
+Jeder Eintrag der Soll-Liste hat einen Status. Zulässig ohne Beleg sind nur
+`noch_nicht_ausgestellt`, `kein_beleg_erwartet` und `ausgeschlossen` — jeweils mit Begründung.
+
+- Alles sauber → weiter.
+- Offene Posten → **nicht den ganzen Lauf stoppen.** Rechne mit dem Vorhandenen weiter und
+  merke dir, dass Phase 4 für die betroffenen Belege gesperrt ist. Der Mensch sieht so das
+  ganze Bild statt eines halben.
+
+Schreibe das Ergebnis nach `50-gates.md`.
+
+## Phase 2 — Auslesen
+
+Spawne den `beleg-leser` für die vorhandenen Belege. Gib ihm den Zeitraum, die Dateiliste und
+den Hinweis, dass er eine JSON-Zeile je Beleg zurückgeben soll.
+
+Bei mehr als etwa 30 Belegen in Stapeln aufteilen — nicht ein Agent je Beleg.
+
+Schreibe sein Ergebnis nach `20-belege.jsonl`. **Du** schreibst, nicht er: Er hat keine
+Schreibrechte, und das ist Absicht.
+
+## Phase 3a — Gate B: Plausibilität
+
+Spawne das `plausibilitaets-gate` mit den Belegdaten und den Dateipfaden. Es prüft
+unabhängig gegen die Dokumente.
+
+- Blockierende Befunde → diese Belege gehen **nicht** weiter. Sammle sie für den Bericht.
+- Hinweise → mitführen, sie fließen in die Klassifikation ein.
+
+Ein Lauf ohne jeden Befund über viele Belege ist ein Grund zur Nachfrage, nicht zur Freude.
+
+## Phase 3b — Klassifizieren
+
+Spawne den `steuer-klassifizierer` mit den bestätigten Belegdaten. Schreibe sein Ergebnis
+nach `30-klassifikation.jsonl`.
+
+### Gate C — Regelkonformität
+
+- Jede Klassifikation nennt eine Regel-ID (P-07). Fehlt sie → zurück an den Klassifizierer.
+- Widersprüche blocken: Reverse-Charge-Vermerk **und** Inlandsvorsteuer, oder Vorsteuerabzug
+  trotz fehlender Pflichtangaben.
+- Alle `entscheidung_noetig` sammeln.
+
+### Entscheidungsvorlagen — gebündelt
+
+Schreibe `60-entscheidungen.md` und lege sie dem Nutzer **am Stück** vor, nicht einzeln
+während der Klassifikation. Je Vorlage: Sachverhalt, Optionen, Empfehlung, Auswirkung auf die
+Zahllast in Cent.
+
+Nenne ausdrücklich, welche Entscheidungen die Zahllast **nicht** ändern — bei
+zahllastneutralen Sachverhalten ist das häufig so, und der Nutzer soll seine Aufmerksamkeit
+auf das Wesentliche richten können.
+
+Warte die Antworten ab. Übernimm sie in die Klassifikation und schlage vor, die Zuordnung ins
+Lieferanten-Memory aufzunehmen, damit dieselbe Frage nicht wiederkehrt.
+
+## Phase 4 — Erfassen
+
+**Bei `--trocken` überspringen.**
+
+Rufe die `erfassen`-Skill mit der Klassifikation auf. Sie prüft vor jedem Anlegen gegen den
+Bestand (Dedup-Schlüssel Lieferant + Belegnummer + Belegdatum + Betrag, P-04) und schreibt
+`40-erfassung.jsonl` fortlaufend — das ist der Wiederaufnahmepunkt, falls der Lauf abbricht.
+
+Belege, die Gate A oder Gate B blockiert hat, werden **nicht** erfasst.
+
+## Phase 5 — Gate D: Abgleich
+
+Rufe die `abgleich`-Skill auf. Im Trockenlauf weist sie die erwartete Voranmeldung aus und
+vergleicht sie mit dem Systemstand.
+
+Blockierende Abweichungen → melden und den Lauf als unvollständig kennzeichnen. Gemeldete
+Abweichungen (etwa gegengleiche Positionen, die um Cent auseinanderlaufen) → im Bericht
+hervorheben, ohne zu blockieren.
+
+## Phase 6 — Audit und Eval
+
+Nicht im Trockenlauf.
+
+Spawne `monats-auditor` (Stichprobe gegen die Dokumente) und anschließend `agent-evaluator`.
+
+## Abschlussbericht
+
+Immer, auch bei Abbruch:
+
+```
+Zeitraum <x> · Modus <trocken|voll> · Besteuerungsart <ist|soll>
+
+Erwartete Voranmeldung
+  <kennziffer> | <basis> | <steuer>
+  Zahllast: <betrag>
+
+Belege       <n> gesammelt, <m> ausgelesen, <k> klassifiziert, <e> erfasst
+Gates        A <status> · B <status> · C <status> · D <status>
+Blockiert    <Belege mit Grund>
+Offen        <fehlende Belege, Logins, Entscheidungen>
+Zu klären    <gemeldete, nicht blockierende Abweichungen>
+```
+
+Schließe mit dem ausdrücklichen Hinweis: **Es wurde nichts übermittelt.** Die Übermittlung
+ist allein Sache des Menschen (P-01).
+
+## Haltung
+
+Blockierende Gates stoppen die **Schreibphasen**, nicht die Analyse. Rechne immer bis zur
+erwarteten Voranmeldung durch — ein halbes Ergebnis hilft niemandem bei der Entscheidung,
+was als Nächstes zu tun ist.

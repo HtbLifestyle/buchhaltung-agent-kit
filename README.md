@@ -30,7 +30,7 @@ Beim Menschen, erzwungen durch Hooks und Regeln:
 ## Installation
 
 ```bash
-/plugin marketplace add ceichmueller/buchhaltung-agent-kit
+/plugin marketplace add ChristianEichmueller/buchhaltung-agent-kit
 /plugin install buchhaltung-kit
 ```
 

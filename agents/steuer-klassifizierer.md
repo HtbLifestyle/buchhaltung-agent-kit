@@ -46,9 +46,8 @@ Arbeite diese Kette ab und halte beim ersten Treffer an:
 6. Querschnitt prüfen: E-07/E-08 formell, E-09 Abzugsfähigkeit, F-01 Währung
 ```
 
-Die Reihenfolge ist nicht beliebig: Ein Amazon-Beleg kann gleichzeitig „Marktplatz" und
-„ig. Erwerb" sein — maßgeblich ist, was auf **diesem** Beleg steht, nicht die Plattform
-(E-06).
+Die Reihenfolge ist nicht beliebig: Ein Marktplatzbeleg kann gleichzeitig Muster M-04 und
+ig. Erwerb sein — maßgeblich ist, was auf **diesem** Beleg steht, nicht die Plattform (E-06).
 
 ### Beim ig. Erwerb steht der Steuersatz nicht auf dem Beleg (E-05)
 

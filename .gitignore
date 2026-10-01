@@ -1,0 +1,10 @@
+.DS_Store
+
+# Niemals Mandantendaten ins Plugin-Repo.
+# Belegdaten, Laufprotokolle und Firmenkontexte liegen im jeweiligen
+# Mandantenprojekt unter .claude/ und gehören dort in dessen .gitignore.
+COMPANY_CONTEXT.md
+buchhaltung-log/
+buchhaltung-eval/
+buchhaltung-offene-punkte.md
+*.belege.jsonl

@@ -1,0 +1,13 @@
+{
+  "name": "buchhaltung-agent-kit",
+  "description": "Marketplace für das buchhaltung-kit Plugin: Agenten-Pipeline für die Umsatzsteuer-Voranmeldung.",
+  "owner": { "name": "ceichmueller" },
+  "plugins": [
+    {
+      "name": "buchhaltung-kit",
+      "source": "./",
+      "description": "Agenten-Pipeline für die monatliche Umsatzsteuer-Voranmeldung (Belege sammeln, klassifizieren, erfassen, prüfen).",
+      "author": { "name": "ceichmueller" }
+    }
+  ]
+}

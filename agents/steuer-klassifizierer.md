@@ -40,6 +40,7 @@ Arbeite diese Kette ab und halte beim ersten Treffer an:
    a) Warenlieferung aus EU, 0 %, Art.-138-Vermerk   -> ig. Erwerb        (E-05)
    b) Leistung aus EU, 0 %, RC-Vermerk               -> § 13b EU          (E-03)
    c) Leistung aus Drittland, RC-Vermerk             -> § 13b Drittland   (E-04)
+      Ansaessigkeit notfalls aus der Anschrift                           (E-17)
    d) auslaendischer Leistender, keine dt. Steuer,
       eigene USt-IdNr. auf dem Beleg, kein Vermerk   -> § 13b             (E-15)
    e) Deutscher Steuerausweis                        -> Inlandsvorsteuer  (E-01/E-02)

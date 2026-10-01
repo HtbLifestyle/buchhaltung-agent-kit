@@ -1,7 +1,7 @@
 # Regelwerk — Umsatzsteuer-Voranmeldung
 
 ```
-REGELWERK_VERSION: 4
+REGELWERK_VERSION: 5
 STAND: 2026-10
 GELTUNG: Deutschland, Regelbesteuerung
 ```
@@ -104,6 +104,41 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   auf, ist der Betrag nicht bestätigt.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
+### G-10 Das Vorzeichen gehört zum Betrag
+- **regel:** Eine Gutschrift, Stornorechnung oder Rückabwicklung trägt einen **negativen**
+  Betrag. Das Vorzeichen ist Teil des Werts, nicht Zierde.
+- **pruefung:** Negative Summen im Totalblock (`Gesamtbetrag netto: -156,64 €`) und/oder die
+  Belegbezeichnung `Gutschrift`/`Stornorechnung` im Kopf. Der Betrag entscheidet, die
+  Bezeichnung stützt: „Gutschrift" bezeichnet im Umsatzsteuerrecht auch die Abrechnung durch
+  den Leistungsempfänger und ist für sich allein mehrdeutig.
+- **folge:** `belegart: gutschrift`, Betrag mit Vorzeichen, Bemessungsgrundlage **mindernd**
+  im Zeitraum der Änderung (A-03).
+- **folge_fehler:** Ohne Vorzeichen wird die Gutschrift zur Ausgabe — der Fehler verdoppelt
+  sich, weil der Betrag nicht nur fehlt, sondern mit falschem Vorzeichen hinzukommt.
+- **belegt:** Zwei Gutschriften eines Monats über −59,50 € und −120,00 € wurden als positive
+  Eingangsrechnungen gelesen. Wirkung auf die Vorsteuer: 60,00 € statt −30,00 €.
+- **auswahl:** Enthält eine Zeile mehrere Beträge, ist der betragsmäßig **größte** maßgeblich
+  — mit erhaltenem Vorzeichen. Ein Maximum ohne Vorzeichenbetrachtung wählt bei Gutschriften
+  die Null.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### B-07 Das Datum steht am Label, aber selten daneben
+- **regel:** Wie beim Betrag (G-08) sind Label und Wert getrennt: als **Spaltenkopf** mit der
+  Wertzeile darunter (`Rechnungs-/Lieferdatum` über der Datenzeile) oder durch Zeilenumbruch.
+- **pruefung:** Trägt die Labelzeile kein Datum, in den folgenden nicht leeren Zeilen
+  nachsehen. Zusätzlich zu beachten: Ordinalzahlen (`Mar 11th 2026`) und ISO-Angaben mit
+  einstelligem Monat (`2026-6-29`).
+- **folge:** Findet sich über Label nichts, das **ganze Dokument** absuchen und das Ergebnis
+  als `unsicher` kennzeichnen — ein unsicheres Datum ist weit besser als keines.
+- **kein_stilles_verwerfen:** Ein Beleg ohne bestimmbares Datum ist **nicht** „außerhalb des
+  Zeitraums", sondern ungeprüft. Er wird als `datum_unbestimmt` gemeldet und ist blockierend.
+  Ein Zeitraumfilter, der ihn stillschweigend überspringt, verliert ihn für immer: Der
+  nächste Lauf sucht einen anderen Monat und kommt nie auf ihn zurück.
+- **belegt:** Zahlreiche Belege eines Jahres trugen Datumsangaben, die keine Labelzeile enthielt.
+  Darunter waren Belege zweier bereits geprüfter Monate — gefunden erst, als der Filter sie
+  melden musste statt sie zu überspringen.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
 ### G-09 Schreibweisen der USt-IdNr.
 - **regel:** Die USt-IdNr. wird normalisiert gelesen: Großbuchstaben, ohne Punkte,
   Leerzeichen und Bindestriche.
@@ -166,6 +201,18 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   bzw. Art. 196 MwStSystRL.
 - **folge:** Bemessungsgrundlage und Steuer in die § 13b-Kennziffern, Vorsteuer in gleicher
   Höhe gegen — **zahllastneutral**.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### E-17 Ansässigkeit notfalls aus der Anschrift
+- **regel:** Ob der Leistende im EU-Ausland oder im Drittland sitzt, entscheidet über E-03
+  oder E-04. Fehlt eine USt-IdNr., ist die **Anschrift** auf dem Beleg heranzuziehen.
+- **pruefung:** Anbieter außerhalb der EU führen regelmäßig gar keine USt-IdNr. Wer nur auf
+  das Länderpräfix einer USt-IdNr. sieht, lässt die Zuordnung offen, obwohl sie im
+  Adressblock steht.
+- **folge:** Genau ein ermittelbares Nicht-Inlandsland → entsprechende Zuordnung. Mehrere
+  oder keines → offen lassen und vorlegen; die Kennziffern unterscheiden sich, die Zahllast
+  nicht.
+- **vorsicht:** Die eigene Anschrift steht ebenfalls auf dem Beleg. Sie scheidet aus.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### E-04 Reverse Charge bei Drittlandsbezug
@@ -483,3 +530,4 @@ Fachliche Zuordnung:
 | 2 | 2026-10 | G-07 ergänzt sowie G-08, G-09, B-05 und E-05 `satz_nicht_vom_beleg` aufgenommen — alle vier aus Befunden eines Trockenlaufs gegen einen bereits gebuchten Monat |
 | 3 | 2026-10 | Zweiter Trockenlauf gegen einen anderen Monat: E-15 (Reverse Charge ohne Hinweis) und E-16 (ein Lieferant, eine Behandlung) neu; E-01 um das Verbot des Regelsatz-Defaults, E-02 um die getrennte Erfassung mehrerer Sätze und G-08 um Zeilenumbruch und qualifizierte Label erweitert |
 | 4 | 2026-10 | B-06 aufgenommen: eine Datei kann mehrere Rechnungen enthalten. Gefunden beim Wiederholungslauf desselben Monats — eine Sammeldatei mit mehrere Rechnungen wurde als ein Beleg gelesen |
+| 5 | 2026-10 | Nachlauf zum zweiten Monat: G-10 (Vorzeichen/Gutschrift), B-07 (Datum am Label, nie stilles Verwerfen) und E-17 (Ansässigkeit aus der Anschrift) aufgenommen |

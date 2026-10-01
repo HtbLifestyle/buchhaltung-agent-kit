@@ -81,8 +81,12 @@ quelle                text | scan | xml
   deinem Vorwissen ableiten. Fehlt etwas, schreibe `null` — nicht raten.
 - **Datum:** Rechnungs- bzw. Leistungsdatum vom Beleg. Bestelldatum und Zahldatum sind
   eigene Felder, nie Ersatz (Regel G-04).
-- **Beträge:** exakt wie ausgewiesen, mit Währung. Keine Umrechnung — das ist nicht deine
-  Aufgabe.
+- **Beträge:** exakt wie ausgewiesen, mit Währung **und Vorzeichen**. Keine Umrechnung — das
+  ist nicht deine Aufgabe.
+- **Gutschriften** (G-10): Negative Summen im Totalblock bedeuten `belegart: gutschrift`. Das
+  Minus gehört zum Wert. Ohne Vorzeichen wird die Gutschrift zur Ausgabe, und der Fehler
+  verdoppelt sich. Enthält eine Zeile mehrere Beträge, nimm den betragsmäßig größten — mit
+  seinem Vorzeichen, nicht das numerische Maximum.
 
 #### Datum — die häufigste Fehlerquelle (G-07)
 
@@ -103,6 +107,16 @@ Verschiedenes.
 
 Liegt das ermittelte Datum außerhalb des Laufzeitraums, der Dateiname aber darin — oder
 umgekehrt — melde das als Auffälligkeit, statt eines von beidem zu bevorzugen.
+
+Das Datum steht **selten neben seinem Label** (B-07): oft ist das Label ein Spaltenkopf
+(`Rechnungs-/Lieferdatum`) und der Wert steht in der Zeile darunter. Trägt die Labelzeile
+kein Datum, sieh in den folgenden nicht leeren Zeilen nach. Achte auf `Mar 11th 2026` und auf
+ISO mit einstelligem Monat (`2026-6-29`).
+
+Findest du über Label nichts, durchsuche das ganze Dokument und markiere das Ergebnis als
+unsicher. Findest du **gar nichts**, ist der Beleg nicht „außerhalb des Zeitraums", sondern
+ungeprüft: `datum_unbestimmt` melden. Ein stillschweigend übersprungener Beleg ist für immer
+verloren — der nächste Lauf sucht einen anderen Monat.
 
 #### Betrag — nie „die größte Zahl" (G-08)
 

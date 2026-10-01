@@ -63,10 +63,13 @@ Abweichungen können Rundung sein — nenne den Centbetrag, statt sie zu überge
 
 Zwei Stufen, die zweite ist die zuverlässigere:
 
-1. **Inhaltsgleich:** gleicher Hash → derselbe Beleg unter zwei Dateinamen.
+1. **Inhaltsgleich:** gleicher Hash **und gleiche Rechnungsnummer** → derselbe Beleg unter
+   zwei Dateinamen.
    ```bash
    md5 -q <datei>      # macOS;  md5sum unter Linux
    ```
+   Die Rechnungsnummer gehört zwingend in den Schlüssel: Eine zerlegte Sammeldatei (B-06)
+   liefert mehrere Belege mit **identischem Dateihash**, die keine Dubletten sind.
    Das passiert häufiger als erwartet, wenn dieselbe Rechnung einmal aus dem Postfach und
    einmal aus dem Portal geholt wurde.
 2. **Feldgleich:** gleicher Lieferant, gleiche Rechnungsnummer, gleicher Betrag, gleiches
@@ -98,6 +101,10 @@ Melde die Gruppe mit allen Dateien und Behandlungen. Entscheide nicht, welche ri
 ### 4c. Nicht gelesene Belege (B-05)
 
 Zähle die Dokumente im Ordner gegen die ausgewerteten. Jede Differenz ist zu erklären.
+
+Zähle dabei **Belege**, nicht Dateien: Eine Sammeldatei liefert mehrere Belege (B-06). Eine
+Eins-zu-eins-Zuordnung von Datei zu Beleg ist kein Beweis für Vollständigkeit, sondern ein
+Anlass nachzusehen, ob eine Sammeldatei dabei war.
 
 Ein Beleg ohne Textebene liefert kein Datum — er wird dadurch nicht „aussortiert", sondern
 **übersehen**: der Zeitraumfilter greift nicht, und niemand merkt es. Verlange für jeden

@@ -1,7 +1,7 @@
 # Regelwerk — Umsatzsteuer-Voranmeldung
 
 ```
-REGELWERK_VERSION: 3
+REGELWERK_VERSION: 4
 STAND: 2026-10
 GELTUNG: Deutschland, Regelbesteuerung
 ```
@@ -381,6 +381,26 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **folge:** Beleg buchen, Lieferant zur Stammdatenänderung vormerken.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
+### B-06 Eine Datei ist nicht ein Beleg
+- **regel:** Eine PDF-Datei kann **mehrere eigenständige Rechnungen** enthalten — je mit
+  eigener Rechnungsnummer, eigenem Datum und eigenem Betrag. Jede davon ist ein eigener
+  Beleg und wird einzeln erfasst.
+- **pruefung:** Kommt im Dokument mehr als eine **verschiedene** Rechnungsnummer vor, ist es
+  eine Sammeldatei. Zerlege sie an den Rechnungsnummern und werte jeden Teil für sich aus.
+  Seitenzahl allein beweist nichts: eine Rechnung kann mehrseitig sein, und mehrere
+  Rechnungen können auf einer Seite stehen.
+- **folge_fehler:** Wer die Datei als einen Beleg liest, erfasst willkürlich **einen** der
+  Vorgänge und verliert die übrigen — ohne Fehlermeldung, weil ein Betrag ja gefunden wurde.
+- **belegt:** In einem realen Monat bündelte eine Marktplatzdatei mehrere Rechnungen über
+  zusammen 80,00 €. Gelesen wurden 5,00 € — die zufällig letzte. 70,00 € Bemessungsgrundlage
+  und 10,00 € Vorsteuer fielen lautlos aus dem Lauf.
+- **dubletten:** Der Dublettenschlüssel ist dann **Dateihash plus Rechnungsnummer**. Über den
+  Dateihash allein gelten die Teile einer zerlegten Sammeldatei fälschlich als Dubletten
+  voneinander.
+- **zeitraum:** Die Teile können verschiedene Rechnungsdaten tragen und damit in verschiedene
+  Voranmeldungszeiträume fallen. Das Datum wird je Teil bestimmt, nie für die Datei.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
 ### B-05 Belege ohne Textebene fallen durch jeden Filter
 - **regel:** Ein Foto oder Scan ohne Textebene liefert kein Datum. Damit greift der
   Zeitraumfilter nicht, und der Beleg verschwindet lautlos aus dem Lauf — er wird weder
@@ -462,3 +482,4 @@ Fachliche Zuordnung:
 | 1 | 2026-10 | Erstfassung, abgeleitet aus einem realen Monatslauf |
 | 2 | 2026-10 | G-07 ergänzt sowie G-08, G-09, B-05 und E-05 `satz_nicht_vom_beleg` aufgenommen — alle vier aus Befunden eines Trockenlaufs gegen einen bereits gebuchten Monat |
 | 3 | 2026-10 | Zweiter Trockenlauf gegen einen anderen Monat: E-15 (Reverse Charge ohne Hinweis) und E-16 (ein Lieferant, eine Behandlung) neu; E-01 um das Verbot des Regelsatz-Defaults, E-02 um die getrennte Erfassung mehrerer Sätze und G-08 um Zeilenumbruch und qualifizierte Label erweitert |
+| 4 | 2026-10 | B-06 aufgenommen: eine Datei kann mehrere Rechnungen enthalten. Gefunden beim Wiederholungslauf desselben Monats — eine Sammeldatei mit mehrere Rechnungen wurde als ein Beleg gelesen |

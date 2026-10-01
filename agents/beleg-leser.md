@@ -143,6 +143,24 @@ zusätzlich das Präfix separat zurück.
 Eine übersehene USt-IdNr. ist teuer: der Beleg landet in der Drittlandsbehandlung und die
 Kennziffer wird falsch, obwohl der Betrag stimmt.
 
+#### Eine Datei ist nicht ein Beleg (B-06)
+
+**Prüfe das zuerst**, bevor du Felder extrahierst. Kommt mehr als eine **verschiedene**
+Rechnungsnummer im Dokument vor, ist es eine Sammeldatei — zerlege sie an den
+Rechnungsnummern und gib **eine Zeile je enthaltener Rechnung** zurück.
+
+Das ist kein Randfall: Marktplätze bündeln regelmäßig alle Vorgänge einer Bestellung in einer
+Datei. Liest du sie als einen Beleg, findest du einen Betrag, meldest keinen Fehler — und
+verlierst die übrigen Vorgänge vollständig.
+
+Je Teil eigenes Datum, eigener Betrag, eigene Nummer. Die Teile können in verschiedene
+Zeiträume fallen. Vermerke `belege_in_datei` und die Rechnungsnummer, damit die
+Dublettenprüfung sie auseinanderhalten kann — über den Dateihash allein sehen sie identisch
+aus.
+
+Seitenzahl beweist nichts: eine Rechnung kann mehrseitig sein, und mehrere Rechnungen können
+auf einer Seite stehen.
+
 #### Belege ohne Textebene (B-05)
 
 Gibt `pdftotext -layout` nichts zurück, hast du **kein Datum** — und damit greift der

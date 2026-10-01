@@ -63,6 +63,10 @@ dass es die Zahllast verändert hätte.
 Fehler durch **Abwesenheit** erzeugen keine Meldung, sondern nur eine Lücke.
 
 - Dateien im Belegordner gegen ausgewertete Dateien zählen. Jede Differenz erklären.
+- **Belege** gegen **Dateien** zählen, nicht nur Dateien gegen Dateien. Steht hinter jeder
+  Datei genau ein Beleg, ist zu prüfen, ob eine Sammeldatei dabei war (B-06) — die muss
+  mehrere liefern. Ein verlorener Teilbeleg erzeugt keine Fehlermeldung, weil ein Betrag ja
+  gefunden wurde.
 - Nicht lesbare Belege: Wurde jeder als Bild gelesen, oder blieb einer liegen (B-05)?
 - Soll-Liste gegen Erfassung: Jeder erwartete Beleg hat einen Status.
 - Nummernkreis der Ausgangsrechnungen auf Lücken prüfen, Stornoketten auflösen (A-02).

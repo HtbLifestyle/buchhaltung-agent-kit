@@ -81,6 +81,34 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   Prüffall.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
+### G-08 Der Betrag steht am Label, nicht in der größten Zahl
+- **regel:** Der Rechnungsbetrag wird an einem Betragslabel gelesen. „Die größte Zahl im
+  Dokument" ist keine zulässige Näherung.
+- **pruefung:** Belegt an zwei Fällen aus einem realen Lauf: eine Ausgangsrechnung trug die
+  Auftragssumme größer als den Rechnungsbetrag, ein Hostingbeleg führte Einzelpositionen
+  mehrerer Monate über dem Monatsbetrag. Beide Male hätte die Heuristik zu hoch gegriffen.
+- **folge:** Zwei Stufen. Zuerst eindeutige Endbetragslabel (`Gesamtbetrag`,
+  `Zu zahlender Betrag`, `Rechnungssumme`, `Zahlbetrag`, `Endbetrag`, `Amount due`,
+  `Invoice total`). Nur wenn keines vorkommt, generisches `Total`/`Summe` — und dann das
+  **letzte** Vorkommen, weil der Endbetrag am Belegende steht.
+- **zusatz:** In Layout-Text stehen Label und Wert regelmäßig über 100 Spalten auseinander.
+  Ein enges Suchfenster hinter dem Label findet den Wert nicht und liefert still `null`.
+- **gegenprobe:** Netto + Steuer je Satz muss den gefundenen Betrag ergeben. Geht es nicht
+  auf, ist der Betrag nicht bestätigt.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### G-09 Schreibweisen der USt-IdNr.
+- **regel:** Die USt-IdNr. wird normalisiert gelesen: Großbuchstaben, ohne Punkte,
+  Leerzeichen und Bindestriche.
+- **pruefung:** Vorkommende Formen sind `DE123456789`, `BE 0123.456.789`, `EU123456789`
+  und `EE VAT EE123456789` — bei der letzten steht ein Wort zwischen Präfix und Nummer.
+- **folge:** Der Zahlenteil beginnt mit einer Ziffer; ein Muster, das das zulässt, verschluckt
+  sonst das Wort `VAT`/`USt-IdNr.` und liefert einen unbrauchbaren Treffer. Das Präfix `EU`
+  kennzeichnet nicht ansässige Anbieter im EU-Verfahren und ist **kein Drittland**.
+- **folge_fehler:** Eine nicht erkannte USt-IdNr. führt den Beleg in die Drittlandsbehandlung
+  — die Kennziffer wird falsch, obwohl der Betrag stimmt.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
 ### G-05 Voranmeldungszeitraum und Frist
 - **regel:** Monat oder Quartal gemäß Context. Abgabefrist ist der 10. Tag nach Ablauf des
   Zeitraums; mit Dauerfristverlängerung einen Monat später.
@@ -134,6 +162,15 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   MwStSystRL, Versendungsland im EU-Ausland, 0 % ausgewiesen.
 - **folge:** Erwerb mit dem für die Ware geltenden Satz versteuern (Regelsatz oder
   ermäßigt), Vorsteuer daraus in gleicher Höhe gegen — zahllastneutral.
+- **satz_nicht_vom_beleg:** Der Beleg weist **0 %** aus — er enthält den deutschen
+  Erwerbsteuersatz also gar nicht. Der Satz folgt aus der **Ware** (z. B. Bücher ermäßigt,
+  Zubehör Regelsatz) und ist aus dem Dokument nicht ableitbar. Ein Default auf den Regelsatz
+  ist deshalb keine Extraktion, sondern eine Erfindung.
+- **folge_satz:** Satz offen lassen (`ig_erwerb_satz_offen`) und zur Entscheidung vorlegen,
+  mit der Leistungsbeschreibung als Grundlage. Weder aus dem Dateinamen ableiten noch raten.
+- **wirkung:** Ein falscher Satz bleibt zahllastneutral, weil Erwerbsteuer und Vorsteuer
+  gegengleich laufen — aber die Kennziffern der Voranmeldung sind falsch. Das macht den
+  Fehler leise und damit gefährlich.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### E-06 Marktplatzbelege einzeln lesen
@@ -295,6 +332,20 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **folge:** Beleg buchen, Lieferant zur Stammdatenänderung vormerken.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
+### B-05 Belege ohne Textebene fallen durch jeden Filter
+- **regel:** Ein Foto oder Scan ohne Textebene liefert kein Datum. Damit greift der
+  Zeitraumfilter nicht, und der Beleg verschwindet lautlos aus dem Lauf — er wird weder
+  aufgenommen noch verworfen, sondern übersehen.
+- **pruefung:** `pdftotext -layout` gibt nichts oder fast nichts zurück; `pdffonts` zeigt
+  keine eingebetteten Schriften.
+- **folge:** Nicht lesbare Belege sind **blockierend** für den Monatslauf, bis sie als Bild
+  gelesen wurden. Sie dürfen nie als „nicht im Zeitraum" gewertet werden — der Lauf weiß das
+  nicht, er hat nur nichts gefunden.
+- **zusatz:** Das Ablagedatum der Datei grenzt ein, aber nur in eine Richtung: ein Beleg kann
+  nicht vor seinem Rechnungsdatum abgelegt worden sein. Liegt die Ablage vor dem Zeitraum,
+  ist der Beleg sicher nicht aus dem Zeitraum. Umgekehrt beweist sie nichts.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
 ---
 
 ## P — Prozess
@@ -360,3 +411,4 @@ Fachliche Zuordnung:
 | Version | Datum | Änderung |
 |---|---|---|
 | 1 | 2026-10 | Erstfassung, abgeleitet aus einem realen Monatslauf |
+| 2 | 2026-10 | G-07 ergänzt sowie G-08, G-09, B-05 und E-05 `satz_nicht_vom_beleg` aufgenommen — alle vier aus Befunden eines Trockenlaufs gegen einen bereits gebuchten Monat |

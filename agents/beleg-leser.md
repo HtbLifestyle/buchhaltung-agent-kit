@@ -104,21 +104,46 @@ Verschiedenes.
 Liegt das ermittelte Datum außerhalb des Laufzeitraums, der Dateiname aber darin — oder
 umgekehrt — melde das als Auffälligkeit, statt eines von beidem zu bevorzugen.
 
-#### Betrag — nie „die größte Zahl"
+#### Betrag — nie „die größte Zahl" (G-08)
 
-Nimm den Betrag **am Label** (`Gesamtbetrag`, `Zu zahlender Betrag`, `Total`, `Amount due`,
-`Rechnungssumme`). Rechnungen enthalten regelmäßig größere Zahlen als den Rechnungsbetrag:
-Einzelpositionen über mehrere Monate, Auftragssummen, Vorjahreswerte, Rabattbasen.
+Nimm den Betrag **am Label**, und zwar in zwei Stufen:
+
+1. eindeutige Endbetragslabel: `Gesamtbetrag`, `Zu zahlender Betrag`, `Rechnungssumme`,
+   `Zahlbetrag`, `Endbetrag`, `Amount due`, `Invoice total`
+2. nur falls keines davon vorkommt: generisches `Total`/`Summe` — dann das **letzte**
+   Vorkommen, denn der Endbetrag steht am Belegende
+
+Rechnungen enthalten regelmäßig größere Zahlen als den Rechnungsbetrag: Einzelpositionen über
+mehrere Monate, Auftragssummen, Vorjahreswerte, Rabattbasen.
+
+Achte auf den Spaltenabstand: in Layout-Text stehen Label und Wert oft über 100 Zeichen
+auseinander. Siehst du das Label, aber keinen Wert daneben, lies die **ganze Zeile**, bevor du
+`null` schreibst.
 
 Prüfe gegen: Summe der Positionen plus Steuer muss den Gesamtbetrag ergeben. Geht es nicht
 auf, ist mindestens eines der Felder falsch — melden statt beschönigen.
 
-#### USt-IdNr. — Schreibweisen
+#### USt-IdNr. — Schreibweisen (G-09)
 
-Trennzeichen und Leerstellen kommen vor (`BE 0123.456.789`). Das Präfix ist nicht immer ein
-Ländercode: `EU` kennzeichnet nicht-ansässige Anbieter im EU-Verfahren und ist **kein**
-Drittland. Normalisiere auf Großbuchstaben ohne Trenner und gib zusätzlich das Präfix separat
-zurück.
+Vorkommende Formen: `DE123456789`, `BE 0123.456.789`, `EU123456789`, `EE VAT EE123456789`.
+Bei der letzten steht ein **Wort zwischen Präfix und Nummer**. Der Zahlenteil beginnt mit
+einer Ziffer — daran erkennst du, wo die Nummer wirklich anfängt.
+
+Das Präfix ist nicht immer ein Ländercode: `EU` kennzeichnet nicht-ansässige Anbieter im
+EU-Verfahren und ist **kein** Drittland. Normalisiere auf Großbuchstaben ohne Trenner und gib
+zusätzlich das Präfix separat zurück.
+
+Eine übersehene USt-IdNr. ist teuer: der Beleg landet in der Drittlandsbehandlung und die
+Kennziffer wird falsch, obwohl der Betrag stimmt.
+
+#### Belege ohne Textebene (B-05)
+
+Gibt `pdftotext -layout` nichts zurück, hast du **kein Datum** — und damit greift der
+Zeitraumfilter nicht. Ein solcher Beleg ist nicht „außerhalb des Zeitraums", sondern
+ungelesen. Lies ihn als Bild und melde ihn ausdrücklich; nie stillschweigend übergehen.
+
+Das Ablagedatum grenzt nur in eine Richtung ein: liegt es **vor** dem Zeitraum, kann der Beleg
+nicht aus dem Zeitraum sein. Liegt es danach, beweist es nichts.
 - **Steuervermerke im Wortlaut**, nicht sinngemäß. Der genaue Text entscheidet später über
   die Behandlung.
 - **Marktplätze:** Verkäufer ist die Gesellschaft auf der Rechnung, nicht die Plattform.

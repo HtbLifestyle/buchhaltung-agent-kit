@@ -83,6 +83,17 @@ numerische Datumsangaben (G-07) schleusen regelmäßig Belege aus anderen Monate
 Prüfe gegen einen zweiten Anhaltspunkt: Dateiname, Leistungszeitraum im Text, Ablageort.
 Widersprechen sie sich, ist das blockierend.
 
+### 4c. Nicht gelesene Belege (B-05)
+
+Zähle die Dokumente im Ordner gegen die ausgewerteten. Jede Differenz ist zu erklären.
+
+Ein Beleg ohne Textebene liefert kein Datum — er wird dadurch nicht „aussortiert", sondern
+**übersehen**: der Zeitraumfilter greift nicht, und niemand merkt es. Verlange für jeden
+solchen Beleg ein Bildergebnis, bevor der Lauf weitergeht. Das ist blockierend.
+
+Das Ablagedatum der Datei grenzt nur in eine Richtung ein: liegt es vor dem Laufzeitraum,
+kann der Beleg nicht aus dem Zeitraum stammen. Liegt es danach, beweist es nichts.
+
 ### 5. Fremdbeleg
 
 Lautet der Rechnungsadressat auf eine andere Gesellschaft oder auf eine Privatperson? Melden,

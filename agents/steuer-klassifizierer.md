@@ -50,12 +50,27 @@ Die Reihenfolge ist nicht beliebig: Ein Amazon-Beleg kann gleichzeitig „Marktp
 „ig. Erwerb" sein — maßgeblich ist, was auf **diesem** Beleg steht, nicht die Plattform
 (E-06).
 
+### Beim ig. Erwerb steht der Steuersatz nicht auf dem Beleg (E-05)
+
+Der Beleg weist **0 %** aus. Er enthält den deutschen Erwerbsteuersatz also gar nicht — der
+folgt aus der **Ware**: ein Buch ermäßigt, Zubehör zum Regelsatz. Du kannst ihn daher nicht
+„auslesen", du musst ihn **zuordnen**.
+
+Grundlage ist allein die Leistungsbeschreibung auf dem Beleg. Der Dateiname ist es nicht,
+auch wenn er verlockend eindeutig aussieht.
+
+Reicht die Beschreibung nicht, gib `ig_erwerb_satz_offen` aus und lege die Frage mit der
+Beschreibung im Wortlaut vor. Ein stiller Default auf den Regelsatz ist hier besonders
+heimtückisch: Erwerbsteuer und Vorsteuer laufen gegengleich, die **Zahllast bleibt richtig** —
+falsch werden nur die Kennziffern. Der Fehler fällt im Abgleich also nicht auf.
+
 ## Was du ausgibst — je Beleg
 
 ```
 datei
 behandlung        inland_19 | inland_7 | §13b_eu | §13b_drittland
-                  | ig_erwerb_19 | ig_erwerb_7 | kein_vorsteuerabzug | ausgang | aussortiert
+                  | ig_erwerb_19 | ig_erwerb_7 | ig_erwerb_satz_offen
+                  | kein_vorsteuerabzug | ausgang | aussortiert
 kategorie         Bezeichnung im Buchhaltungssystem laut Context
 steuersatz        19 | 7 | keine
 betrag_erfassung  der Betrag, der ins Betragsfeld gehört

@@ -1,7 +1,7 @@
 # Regelwerk — Umsatzsteuer-Voranmeldung
 
 ```
-REGELWERK_VERSION: 5
+REGELWERK_VERSION: 6
 STAND: 2026-10
 GELTUNG: Deutschland, Regelbesteuerung
 ```
@@ -120,6 +120,18 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **auswahl:** Enthält eine Zeile mehrere Beträge, ist der betragsmäßig **größte** maßgeblich
   — mit erhaltenem Vorzeichen. Ein Maximum ohne Vorzeichenbetrachtung wählt bei Gutschriften
   die Null.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### G-11 Die Währung steht am Betrag, nicht im Dokument
+- **regel:** Die Währung wird im **Umfeld des Gesamtbetrags** gelesen, nicht durch Suche nach
+  einem Währungszeichen im Dokument.
+- **pruefung:** Produktbezeichnungen enthalten Währungszeichen. Ein Buchtitel wie
+  `$100 Muster-Titel` macht aus einer Euro-Rechnung eine Fremdwährungsrechnung.
+- **folge_fehler:** Die Folge ist nicht nur ein falsches Feld: Der Beleg wandert in die
+  Umrechnung (F-01), verlangt einen Kurs, den es nicht braucht, und blockiert den Lauf mit
+  einer Frage, die auf einem Lesefehler beruht.
+- **belegt:** Zwei Inlandsrechnungen eines Monats wurden so zu Fremdwährungsbelegen und
+  fielen zugleich aus der Summenbildung der Inlandsvorsteuer.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### B-07 Das Datum steht am Label, aber selten daneben
@@ -262,11 +274,36 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 
 ### E-16 Ein Lieferant, eine Behandlung
 - **regel:** Derselbe Leistende im selben Zeitraum mit zwei verschiedenen Behandlungen ist
-  ein Prüffall — ausnahmslos.
-- **pruefung:** Belege nach USt-IdNr. des Leistenden gruppieren und die Behandlungen je
-  Gruppe vergleichen. Die Prüfung braucht kein Steuerwissen und kostet nichts.
+  ein Prüffall — ausnahmslos. Dasselbe gilt für zwei verschiedene Ansässigkeitsländer.
+- **pruefung:** Belege nach Leistendem gruppieren und die Behandlungen je Gruppe vergleichen.
+  Die Prüfung braucht kein Steuerwissen und kostet nichts.
+- **gruppierung:** Der Schlüssel ist der **Lieferantenname**; die USt-IdNr. nur hilfsweise,
+  wenn kein Name ermittelbar ist. Nicht umgekehrt.
+- **warum:** Eine Prüfung, die auf einem Feld gruppiert, das **fehlen kann**, lässt genau die
+  Fälle durch, die sie finden soll. Fehlt die USt-IdNr. auf einem Beleg, bildet dieser Beleg
+  eine eigene Gruppe von eins — und eine Gruppe mit einem Element ist nie uneinheitlich. Der
+  Prüfbericht meldet dann null Befunde und sieht aus wie ein Erfolg.
+- **belegt:** Mehrere Belege eines Lieferanten verteilten sich in einem Monat auf drei
+  Behandlungen und zwei Länder. Die Prüfung meldete null Befunde, weil sie nach der USt-IdNr.
+  gruppierte — und die stand nur auf einem von ihnen.
 - **folge:** Abweichung melden. Entweder unterscheidet sich der Sachverhalt tatsächlich
   (dann ist die Begründung zu nennen), oder einer der Belege ist falsch eingestuft.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
+### E-18 Lieferanteneigenschaften gelten belegübergreifend
+- **regel:** USt-IdNr. und Ansässigkeit sind Eigenschaften des **Lieferanten**, nicht des
+  einzelnen Belegs. Trägt ein Beleg des Lieferanten sie, gelten sie für dessen übrige Belege
+  mit — im selben Zeitraum und über Zeiträume hinweg via Lieferanten-Memory.
+- **pruefung:** Anbieter drucken ihre Steuerregistrierung nicht auf jede Rechnung. Fehlt sie,
+  ist das ein formeller Mangel (E-07) und kein anderer Sachverhalt.
+- **folge:** Fehlende Angabe aus dem Lieferanten-Memory ergänzen, die Herkunft vermerken
+  (`land_quelle: lieferant_memory`) und neu einordnen. Die Übernahme wird **ausgewiesen**,
+  nie stillschweigend vorgenommen.
+- **grenze:** Nur gleichrichtende Angaben übernehmen. Ein abweichender Betrag, ein anderes
+  Datum oder eine andere Leistungsart werden nie ergänzt — nur, wer der Leistende ist.
+- **belegt:** Ohne diese Regel wandern Belege desselben Anbieters je nach Druckbild in
+  Drittland, EU und „kein Vorsteuerabzug" — mit unterschiedlichen Kennziffern bei identischem
+  Sachverhalt.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### E-06 Marktplatzbelege einzeln lesen
@@ -531,3 +568,4 @@ Fachliche Zuordnung:
 | 3 | 2026-10 | Zweiter Trockenlauf gegen einen anderen Monat: E-15 (Reverse Charge ohne Hinweis) und E-16 (ein Lieferant, eine Behandlung) neu; E-01 um das Verbot des Regelsatz-Defaults, E-02 um die getrennte Erfassung mehrerer Sätze und G-08 um Zeilenumbruch und qualifizierte Label erweitert |
 | 4 | 2026-10 | B-06 aufgenommen: eine Datei kann mehrere Rechnungen enthalten. Gefunden beim Wiederholungslauf desselben Monats — eine Sammeldatei mit mehrere Rechnungen wurde als ein Beleg gelesen |
 | 5 | 2026-10 | Nachlauf zum zweiten Monat: G-10 (Vorzeichen/Gutschrift), B-07 (Datum am Label, nie stilles Verwerfen) und E-17 (Ansässigkeit aus der Anschrift) aufgenommen |
+| 6 | 2026-10 | Dritter Monat: E-18 (Lieferanteneigenschaften gelten belegübergreifend) und G-11 (Währung am Betrag) neu; E-16 um die Wahl des Gruppierungsschlüssels geschärft — eine Prüfung, die auf einem Feld gruppiert, das fehlen kann, meldet null Befunde |

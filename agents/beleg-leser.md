@@ -83,6 +83,13 @@ quelle                text | scan | xml
   eigene Felder, nie Ersatz (Regel G-04).
 - **Beträge:** exakt wie ausgewiesen, mit Währung **und Vorzeichen**. Keine Umrechnung — das
   ist nicht deine Aufgabe.
+- **Währung** (G-11): aus dem **Umfeld des Gesamtbetrags**, nicht durch Suche nach einem
+  Währungszeichen im Dokument. Produktbezeichnungen enthalten welche — ein Buchtitel wie
+  `$100 Muster-Titel` macht aus einer Euro-Rechnung sonst einen Fremdwährungsbeleg, der
+  einen Umrechnungskurs verlangt, den niemand braucht.
+- **Lieferant** (E-18): Name der abrechnenden Gesellschaft, erkennbar an der Rechtsform
+  (GmbH, Inc., B.V., PBC …). Die **eigene** Gesellschaft und ihre früheren Firmierungen
+  scheiden aus — die eigene Anschrift steht auf jedem Beleg. Beide Namen stehen im Context.
 - **Gutschriften** (G-10): Negative Summen im Totalblock bedeuten `belegart: gutschrift`. Das
   Minus gehört zum Wert. Ohne Vorzeichen wird die Gutschrift zur Ausgabe, und der Fehler
   verdoppelt sich. Enthält eine Zeile mehrere Beträge, nimm den betragsmäßig größten — mit

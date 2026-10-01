@@ -88,13 +88,21 @@ Widersprechen sie sich, ist das blockierend.
 
 ### 4d. Ein Lieferant, eine Behandlung (E-16)
 
-Gruppiere die Belege nach USt-IdNr. des Leistenden und vergleiche die Behandlungen je Gruppe.
+Gruppiere die Belege nach dem Leistenden und vergleiche Behandlungen **und Länder** je Gruppe.
 Zwei verschiedene Behandlungen desselben Leistenden im selben Zeitraum sind ein Prüffall —
 ausnahmslos.
 
 Diese Prüfung braucht kein Steuerwissen und kostet nichts, und sie findet genau die Fälle, die
 sonst durchrutschen: Ein Beleg desselben Anbieters, dem ein Pflichtvermerk fehlt, wird anders
 eingestuft als seine Geschwister (E-15).
+
+**Gruppiere nach dem Lieferantennamen, nicht nach der USt-IdNr.** Das ist kein Detail: Ein
+Schlüssel, der fehlen kann, bildet für jeden Beleg ohne ihn eine eigene Gruppe von eins — und
+eine Gruppe mit einem Element ist nie uneinheitlich. Die Prüfung meldet dann null Befunde und
+liest sich wie ein Erfolg, während sie genau die Fälle übersieht, für die es sie gibt.
+
+Prüfe das an dir selbst: Wenn diese Prüfung null Befunde meldet, sieh nach, wie viele Gruppen
+nur **einen** Beleg enthalten. Sind es auffällig viele, ist der Schlüssel falsch gewählt.
 
 Melde die Gruppe mit allen Dateien und Behandlungen. Entscheide nicht, welche richtig ist.
 

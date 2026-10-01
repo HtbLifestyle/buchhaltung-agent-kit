@@ -64,6 +64,19 @@ fehlenden Vermerk gesondert.
 Lässt sich die Ansässigkeit nicht feststellen, ist die Zuordnung zu EU oder Drittland offen —
 `§13b_verdacht` und vorlegen. Die Kennziffern unterscheiden sich, die Zahllast nicht.
 
+### Was der Lieferant ist, steht nicht auf jedem Beleg (E-18)
+
+USt-IdNr. und Ansässigkeit gehören dem **Lieferanten**, nicht dem einzelnen Beleg. Anbieter
+drucken ihre Steuerregistrierung nicht auf jede Rechnung.
+
+Trägt ein Beleg des Lieferanten sie, gilt sie für dessen übrige Belege mit — im Zeitraum und
+aus dem Lieferanten-Memory. Ohne diese Zusammenführung wandern Rechnungen desselben Anbieters
+je nach Druckbild in Drittland, EU und „kein Vorsteuerabzug", bei identischem Sachverhalt.
+
+Weise die Übernahme aus (`land_quelle: lieferant_memory`). Sie darf nie stillschweigend
+geschehen — und sie betrifft **nur**, wer der Leistende ist. Betrag, Datum und Leistungsart
+werden niemals aus einem anderen Beleg ergänzt.
+
 ### Kein Default auf den Regelsatz (E-01)
 
 Ein inländischer Beleg ohne ausgewiesene Steuer ist **keine** Regelsatzleistung. Weist er

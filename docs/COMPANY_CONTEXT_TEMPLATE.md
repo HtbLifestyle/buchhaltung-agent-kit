@@ -22,6 +22,9 @@ REGELWERK_VERSION: 1          # Version, unter der zuletzt gebucht wurde
 unternehmen:
   name:
   frühere_firmierungen: []     # erscheinen noch auf Rechnungen alter Lieferanten
+                               # Zugleich Ausschlussliste bei der Lieferantenerkennung
+                               # (E-18): die eigene Anschrift steht auf jedem Beleg und
+                               # würde sonst als Leistender gelesen
   rechtsform:
   ust_id:                      # AUSLESEN
   steuernummer:                # AUSLESEN

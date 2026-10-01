@@ -83,6 +83,42 @@ quelle                text | scan | xml
   eigene Felder, nie Ersatz (Regel G-04).
 - **Beträge:** exakt wie ausgewiesen, mit Währung. Keine Umrechnung — das ist nicht deine
   Aufgabe.
+
+#### Datum — die häufigste Fehlerquelle (G-07)
+
+Nimm das Datum **am Label**, nicht irgendeines aus dem Dokument. Reihenfolge der
+Verlässlichkeit:
+
+| Form | Beispiel | eindeutig? |
+|---|---|---|
+| ausgeschriebener Monat | `September 28, 2026` · `30. Sep 2026` | ja |
+| ISO | `2026-09-08` | ja |
+| deutsch mit Punkten | `28.09.2026` | ja |
+| numerisch mit Schrägstrich | `09/01/2026` | **nein** |
+
+Bei der letzten Form: Ist die zweite Zahl > 12, ist es Monat/Tag. Sonst ist sie **nicht
+auflösbar** — zieh die Herkunft des Ausstellers heran und markiere `datum_unsicher: true`.
+Dieselbe Schreibweise bedeutet bei einem deutschen und einem ausländischen Anbieter
+Verschiedenes.
+
+Liegt das ermittelte Datum außerhalb des Laufzeitraums, der Dateiname aber darin — oder
+umgekehrt — melde das als Auffälligkeit, statt eines von beidem zu bevorzugen.
+
+#### Betrag — nie „die größte Zahl"
+
+Nimm den Betrag **am Label** (`Gesamtbetrag`, `Zu zahlender Betrag`, `Total`, `Amount due`,
+`Rechnungssumme`). Rechnungen enthalten regelmäßig größere Zahlen als den Rechnungsbetrag:
+Einzelpositionen über mehrere Monate, Auftragssummen, Vorjahreswerte, Rabattbasen.
+
+Prüfe gegen: Summe der Positionen plus Steuer muss den Gesamtbetrag ergeben. Geht es nicht
+auf, ist mindestens eines der Felder falsch — melden statt beschönigen.
+
+#### USt-IdNr. — Schreibweisen
+
+Trennzeichen und Leerstellen kommen vor (`BE 0123.456.789`). Das Präfix ist nicht immer ein
+Ländercode: `EU` kennzeichnet nicht-ansässige Anbieter im EU-Verfahren und ist **kein**
+Drittland. Normalisiere auf Großbuchstaben ohne Trenner und gib zusätzlich das Präfix separat
+zurück.
 - **Steuervermerke im Wortlaut**, nicht sinngemäß. Der genaue Text entscheidet später über
   die Behandlung.
 - **Marktplätze:** Verkäufer ist die Gesellschaft auf der Rechnung, nicht die Plattform.

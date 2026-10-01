@@ -64,6 +64,23 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   Kontoauszug.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
+### G-07 Numerische Datumsangaben sind mehrdeutig
+- **regel:** Ein Datum der Form `09/01/2026` ist **nicht** auflösbar, ohne die Herkunft des
+  Ausstellers zu kennen. Dasselbe Schriftbild bedeutet je nach Anbieter Tag/Monat oder
+  Monat/Tag.
+- **pruefung:** Belegt an zwei Rechnungen desselben Zeitraums: ein deutscher Anbieter
+  schrieb `09/01/2026` für den 9. Januar, ein ausländischer `09/15/2026` für den 15. September.
+  Eine Zahl über 12 an zweiter Stelle beweist Monat/Tag — darunter beweist nichts.
+- **folge:** Bevorzuge in dieser Reihenfolge: ausgeschriebener Monat („September 28, 2026"),
+  ISO (`2026-09-08`), deutsches Format mit Punkten (`28.09.2026`). Bleibt nur ein
+  mehrdeutiges numerisches Datum, wird die Herkunft des Ausstellers herangezogen und das
+  Ergebnis als `unsicher` markiert. Lässt sich die Mehrdeutigkeit nicht auflösen →
+  `entscheidung_noetig`, nie raten.
+- **zusatz:** Ein Beleg, dessen ermitteltes Datum außerhalb des Laufzeitraums liegt, aber
+  dessen Dateiname oder Ablageort auf den Zeitraum deutet — und umgekehrt — ist immer ein
+  Prüffall.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+
 ### G-05 Voranmeldungszeitraum und Frist
 - **regel:** Monat oder Quartal gemäß Context. Abgabefrist ist der 10. Tag nach Ablauf des
   Zeitraums; mit Dauerfristverlängerung einen Monat später.

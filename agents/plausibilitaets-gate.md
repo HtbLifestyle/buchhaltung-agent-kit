@@ -61,8 +61,27 @@ Abweichungen können Rundung sein — nenne den Centbetrag, statt sie zu überge
 
 ### 4. Dubletten
 
-Gleicher Lieferant, gleiche Rechnungsnummer, gleicher Betrag, gleiches Datum → Verdacht auf
-Doppelerfassung. Melde beide Dateien.
+Zwei Stufen, die zweite ist die zuverlässigere:
+
+1. **Inhaltsgleich:** gleicher Hash → derselbe Beleg unter zwei Dateinamen.
+   ```bash
+   md5 -q <datei>      # macOS;  md5sum unter Linux
+   ```
+   Das passiert häufiger als erwartet, wenn dieselbe Rechnung einmal aus dem Postfach und
+   einmal aus dem Portal geholt wurde.
+2. **Feldgleich:** gleicher Lieferant, gleiche Rechnungsnummer, gleicher Betrag, gleiches
+   Datum bei unterschiedlichem Hash → derselbe Vorgang in zwei Fassungen (z. B. Kopie mit
+   anderem Zeitstempel).
+
+Melde immer **beide** Dateien mit Pfad und Hash, damit erkennbar ist, welche behalten wird.
+
+### 4b. Zeitraum
+
+Liegt das Belegdatum außerhalb des Laufzeitraums? Das ist kein Randfall — mehrdeutige
+numerische Datumsangaben (G-07) schleusen regelmäßig Belege aus anderen Monaten ein.
+
+Prüfe gegen einen zweiten Anhaltspunkt: Dateiname, Leistungszeitraum im Text, Ablageort.
+Widersprechen sie sich, ist das blockierend.
 
 ### 5. Fremdbeleg
 

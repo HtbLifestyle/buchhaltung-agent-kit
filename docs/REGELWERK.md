@@ -134,22 +134,6 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   fielen zugleich aus der Summenbildung der Inlandsvorsteuer.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
-### B-07 Das Datum steht am Label, aber selten daneben
-- **regel:** Wie beim Betrag (G-08) sind Label und Wert getrennt: als **Spaltenkopf** mit der
-  Wertzeile darunter (`Rechnungs-/Lieferdatum` über der Datenzeile) oder durch Zeilenumbruch.
-- **pruefung:** Trägt die Labelzeile kein Datum, in den folgenden nicht leeren Zeilen
-  nachsehen. Zusätzlich zu beachten: Ordinalzahlen (`Mar 11th 2026`) und ISO-Angaben mit
-  einstelligem Monat (`2026-6-29`).
-- **folge:** Findet sich über Label nichts, das **ganze Dokument** absuchen und das Ergebnis
-  als `unsicher` kennzeichnen — ein unsicheres Datum ist weit besser als keines.
-- **kein_stilles_verwerfen:** Ein Beleg ohne bestimmbares Datum ist **nicht** „außerhalb des
-  Zeitraums", sondern ungeprüft. Er wird als `datum_unbestimmt` gemeldet und ist blockierend.
-  Ein Zeitraumfilter, der ihn stillschweigend überspringt, verliert ihn für immer: Der
-  nächste Lauf sucht einen anderen Monat und kommt nie auf ihn zurück.
-- **belegt:** Zahlreiche Belege eines Jahres trugen Datumsangaben, die keine Labelzeile enthielt.
-  Darunter waren Belege zweier bereits geprüfter Monate — gefunden erst, als der Filter sie
-  melden musste statt sie zu überspringen.
-- gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### G-09 Schreibweisen der USt-IdNr.
 - **regel:** Die USt-IdNr. wird normalisiert gelesen: Großbuchstaben, ohne Punkte,
@@ -483,6 +467,22 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   voneinander.
 - **zeitraum:** Die Teile können verschiedene Rechnungsdaten tragen und damit in verschiedene
   Voranmeldungszeiträume fallen. Das Datum wird je Teil bestimmt, nie für die Datei.
+- gilt_ab: 2020-01-01 · wert_pruefen: nein
+### B-07 Das Datum steht am Label, aber selten daneben
+- **regel:** Wie beim Betrag (G-08) sind Label und Wert getrennt: als **Spaltenkopf** mit der
+  Wertzeile darunter (`Rechnungs-/Lieferdatum` über der Datenzeile) oder durch Zeilenumbruch.
+- **pruefung:** Trägt die Labelzeile kein Datum, in den folgenden nicht leeren Zeilen
+  nachsehen. Zusätzlich zu beachten: Ordinalzahlen (`Mar 11th 2026`) und ISO-Angaben mit
+  einstelligem Monat (`2026-6-29`).
+- **folge:** Findet sich über Label nichts, das **ganze Dokument** absuchen und das Ergebnis
+  als `unsicher` kennzeichnen — ein unsicheres Datum ist weit besser als keines.
+- **kein_stilles_verwerfen:** Ein Beleg ohne bestimmbares Datum ist **nicht** „außerhalb des
+  Zeitraums", sondern ungeprüft. Er wird als `datum_unbestimmt` gemeldet und ist blockierend.
+  Ein Zeitraumfilter, der ihn stillschweigend überspringt, verliert ihn für immer: Der
+  nächste Lauf sucht einen anderen Monat und kommt nie auf ihn zurück.
+- **belegt:** Zahlreiche Belege eines Jahres trugen Datumsangaben, die keine Labelzeile enthielt.
+  Darunter waren Belege zweier bereits geprüfter Monate — gefunden erst, als der Filter sie
+  melden musste statt sie zu überspringen.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
 ### B-05 Belege ohne Textebene fallen durch jeden Filter

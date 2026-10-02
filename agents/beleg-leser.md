@@ -34,19 +34,76 @@ Lies außerdem `docs/LIEFERANTEN_MUSTER.md` des Plugins — nicht um zu klassifi
 um zu wissen, **welche Felder** du besonders sorgfältig suchen musst (Steuervermerke,
 Versendungsland, USt-IdNr. beider Seiten).
 
-## Vorgehen je Beleg
+## Schritt 1 — Das Werkzeug laufen lassen
 
-### 1. Textebene gewinnen
+**Beginne immer hiermit**, nicht mit dem Lesen einzelner Dateien:
 
 ```bash
-pdftotext -layout "<datei>" -
+python3 "${CLAUDE_PLUGIN_ROOT}/tools/belege_lesen.py" \
+    --zeitraum <JJJJ-MM> \
+    --context .claude/docs/COMPANY_CONTEXT.md
 ```
 
-Kommt nichts oder fast nichts zurück, ist es ein Scan oder ein Foto → lies die Datei mit dem
-Read-Tool als Bild. Vermerke `quelle: scan`.
+Es liefert eine JSON-Zeile je Beleg und auf stderr eine Zusammenfassung.
 
-Liegt eine strukturierte Rechnung vor (XML, ZUGFeRD-Anhang im PDF), nutze **diese** — die
-Steuerdaten stehen dort eindeutig statt im Layout (Regel B-03).
+Das Werkzeug macht den mechanischen Teil: Textebene, Sammeldateien zerlegen, Datum, Betrag
+samt Vorzeichen, Währung, USt-IdNr., Lieferant, Dubletten, Lieferantengruppen. Das sind
+Zeichenkettenoperationen mit genau einer richtigen Antwort — und ihre Fehler sind lautlos.
+Jede dieser Regeln ist einmal an einem echten Beleg gescheitert und seitdem durch einen
+Testfall abgesichert (`tools/selbsttest.py`). Leitest du sie bei jedem Lauf neu her, machst
+du sie manchmal wieder falsch, ohne dass es auffällt.
+
+**Das Ergebnis ist ein Vorschlag, keine Wahrheit.** Deine Arbeit beginnt da, wo das Werkzeug
+aufhört.
+
+## Schritt 2 — Was nur du kannst
+
+### Belege ohne Textebene (`status: nicht_lesbar`)
+
+Scan oder Foto. Lies die Datei mit dem Read-Tool **als Bild** und erzeuge die Felder selbst.
+Vermerke `quelle: scan`. Diese Belege sind blockierend, bis sie gelesen sind (B-05) — ein
+Lauf, der sie liegen lässt, verliert sie.
+
+### Belege ohne Datum (`status: datum_unbestimmt`)
+
+Sieh selbst nach: Steht ein Datum in einer Form im Dokument, die das Werkzeug nicht kennt?
+Deutet der Dateiname oder der Leistungszeitraum auf den Zeitraum? Melde, was du findest —
+und wenn du nichts findest, sag das.
+
+### Strukturierte Rechnungen
+
+Liegt eine XRechnung oder ein ZUGFeRD-Anhang im PDF, nutze **diese** — die Steuerdaten stehen
+dort eindeutig statt im Layout (B-03). Das Werkzeug liest nur die Sichtebene.
+
+### Ist das überhaupt ein Beleg?
+
+Das Werkzeug fragt nicht danach, es liest Felder. Gesellschafterbeschlüsse, Verträge,
+Angebote, Mahnungen, Lieferscheine und Zahlungsbestätigungen haben ebenfalls Datum und
+Betrag — und werden anstandslos extrahiert. Nur du kannst `belegart: kein_beleg` setzen.
+
+### Jede Marke in `pruefen`
+
+Das Werkzeug markiert, was es nicht entscheiden darf. Geh jede Marke durch und sag, was du
+im Dokument siehst. `steuersatz_aus_ware`, `leistender_land_unklar` und
+`betrag_nicht_gefunden` sind Fragen an dich, keine Statusmeldungen.
+
+## Schritt 3 — Stichprobe gegen das Dokument
+
+Übernimm die Ausgabe nicht ungeprüft. Nimm mindestens die betragsgrößten Belege, alle
+Gutschriften und alle Belege mit Marke, öffne das Dokument und vergleiche.
+
+Geht `Netto + Steuer = Betrag` nicht auf, ist mindestens ein Feld falsch — melden statt
+beschönigen.
+
+Findest du einen Fehler, den das Werkzeug gemacht hat, ist das ein **Befund über das
+Werkzeug**: Nenne ihn ausdrücklich im Bericht, mit Datei und Belegstelle. Daraus wird ein
+Testfall, nicht eine stille Korrektur in deinem Kopf.
+
+## Warum du die Regeln trotzdem kennst
+
+Die folgenden Abschnitte beschreiben, **was** das Werkzeug tut und warum. Du brauchst das
+nicht, um es aufzurufen — du brauchst es, um sein Ergebnis prüfen zu können und um Belege
+richtig zu lesen, die es gar nicht erreicht hat (Scans, XML, Fotos).
 
 ### 2. Felder extrahieren
 

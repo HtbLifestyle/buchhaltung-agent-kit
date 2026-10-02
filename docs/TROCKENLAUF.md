@@ -44,8 +44,15 @@ Abwesenheit (B-05).
 
 ## Umgang mit Befunden
 
-Jeder Befund wird zu einer Regel mit ID, nicht zu einem Einzelfix im Skript. Danach läuft der
-Trockenlauf erneut — eine Regel, die den gefundenen Fall nicht schließt, ist nicht fertig.
+Jeder Befund wird zu **beidem**: einer Regel mit ID im Regelwerk und einem Testfall in
+`tools/selbsttest.py`, der das Layoutmuster nachstellt. Danach läuft der Trockenlauf erneut —
+eine Regel, die den gefundenen Fall nicht schließt, ist nicht fertig.
+
+Der Testfall ist nicht die Kür. Eine Regel, die nur als Prosa existiert, wird bei jedem Lauf
+neu hergeleitet und dabei manchmal wieder falsch angewandt. Ein Testfall macht sie dauerhaft.
+
+Prüfe dabei **beide Richtungen**: Die Regel muss den gefundenen Fall fangen und den
+Normalfall durchlassen. Eine Regel, die alles verwirft, besteht einen einseitigen Test.
 
 Ein Trockenlauf ohne Befunde bei erstmaligem Einsatz ist kein gutes Zeichen, sondern ein
 Grund, den Maßstab zu schärfen.

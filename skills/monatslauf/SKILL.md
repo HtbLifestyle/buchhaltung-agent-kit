@@ -51,7 +51,13 @@ Schreibe das Ergebnis nach `50-gates.md`.
 Spawne den `beleg-leser` für die vorhandenen Belege. Gib ihm den Zeitraum, die Dateiliste und
 den Hinweis, dass er eine JSON-Zeile je Beleg zurückgeben soll.
 
+Er beginnt mit `tools/belege_lesen.py` — dem deterministischen Teil — und arbeitet dann ab,
+was Urteil braucht: Scans, strukturierte Rechnungen, Nichtbelege und jede `pruefen`-Marke.
 Bei mehr als etwa 30 Belegen in Stapeln aufteilen — nicht ein Agent je Beleg.
+
+Prüfe die Kopfzeile seiner Werkzeugausgabe: Stehen auffällig viele Lieferanten mit nur
+**einem** Beleg oder ohne erkannten Lieferanten, trägt die Gruppierung nicht — dann ist ein
+Null-Befund in Gate B kein Ergebnis, sondern ein Messfehler (E-16).
 
 Schreibe sein Ergebnis nach `20-belege.jsonl`. **Du** schreibst, nicht er: Er hat keine
 Schreibrechte, und das ist Absicht.

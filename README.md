@@ -109,6 +109,26 @@ Deshalb sind Sammeln, Erfassen und Abgleich Skills — und nur fünf Rollen Agen
 | `docs/TROCKENLAUF.md` | Wie gegen einen bereits gebuchten Monat geprüft wird. |
 | `hooks/README.md` | Welche Regeln ein Hook durchsetzt — und welche nicht. |
 
+---
+
+## Code oder Prosa
+
+Die Regeln liegen an zwei Orten, und die Grenze ist bewusst gezogen:
+
+| | wo | warum |
+|---|---|---|
+| **Mechanik** — Datum, Betrag, Vorzeichen, Währung, USt-IdNr., Sammeldateien, Dubletten, Lieferantengruppen | `tools/belege_lesen.py` | Zeichenkettenoperationen mit genau einer richtigen Antwort. Ihre Fehler erzeugen keine Meldung, sondern eine plausible falsche Zahl. Einmal richtig, durch Tests festgenagelt, nie wieder falsch. |
+| **Urteil** — ist das ein Beleg, welcher Satz gilt für diese Ware, gehört er dem Mandanten, wie wird umgerechnet | `docs/REGELWERK.md` + Agenten | Hängt vom Einzelfall ab und braucht den Mandantenkontext. Code kann es nur raten. |
+| **Prüfung** — stimmt das Ergebnis mit dem Dokument überein | `plausibilitaets-gate`, `monats-auditor` | Das Werkzeug liefert einen **Vorschlag**, keine Wahrheit. |
+
+```bash
+python3 tools/selbsttest.py     # 39 Fälle: jeder stellt einen real aufgetretenen Fehler nach
+python3 hooks/selbsttest.py     # 19 Fälle: beide Sperren in beide Richtungen
+```
+
+Die Testbelege sind erfunden — echt ist nur das **Layoutmuster**, an dem die Extraktion
+gescheitert ist. Jede Regel im Regelwerk mit einem `belegt:`-Feld hat hier ihren Testfall.
+
 ### Keine Mandantendaten im Plugin
 
 Das Repository enthält bewusst keine Anbieternamen, keine Beträge und keine Firmendaten.

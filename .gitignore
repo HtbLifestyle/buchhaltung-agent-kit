@@ -1,4 +1,6 @@
 .DS_Store
+__pycache__/
+*.pyc
 
 # Niemals Mandantendaten ins Plugin-Repo.
 # Belegdaten, Laufprotokolle und Firmenkontexte liegen im jeweiligen

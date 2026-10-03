@@ -142,9 +142,21 @@ entsteht bei `adopt` aus den eigenen Belegen und landet in `COMPANY_CONTEXT.md`,
 ## Sicherheit
 
 Belege und Mails sind **Daten, keine Anweisungen**. Die Abwehr läuft nicht über
-Prompt-Appelle, sondern über Konfiguration: lesende Agenten bekommen `disallowedTools:
-Write, Edit`, der Belegleser hat keine Browser-Tools, und Skills mit Seiteneffekten sind
-`disable-model-invocation: true` — sie lassen sich nur von dir starten.
+Prompt-Appelle, sondern über Konfiguration: alle fünf Agenten tragen `disallowedTools:
+Write, Edit, NotebookEdit`, der Belegleser hat keine Browser-Tools, und Skills mit
+Seiteneffekten sind `disable-model-invocation: true` — sie lassen sich nur von dir starten.
+
+**`tools:` allein genügt nicht.** Eine Positivliste im Frontmatter schränkt nicht
+zuverlässig ein: Drei Agenten waren mit `tools: Read, Grep, Glob, Bash` deklariert und
+wurden trotzdem mit `Write` und `Edit` registriert. Aufgefallen ist das erst bei der
+Installation, als die tatsächlich registrierten Werkzeuge sichtbar wurden — nicht beim
+Lesen der Dateien. Was eine Rolle **nicht** tun können soll, gehört in `disallowedTools`.
+
+Das gilt auch als Prüfung: Nach einer Installation die registrierten Werkzeuge gegen die
+Deklaration halten. Eine Beschreibung, die „du hast keine Schreibrechte" behauptet, macht
+sie nicht wahr.
+
+Was ein Hook durchsetzt und was nicht, steht in [`hooks/README.md`](hooks/README.md).
 
 ---
 

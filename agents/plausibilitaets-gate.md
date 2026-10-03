@@ -2,6 +2,7 @@
 name: plausibilitaets-gate
 description: "Prüft unabhängig, ob ausgelesene Belegdaten zum Dokument passen und ob ein Dokument überhaupt eine Rechnung ist. Nutze diesen Agenten als Qualitätsschranke zwischen Auslesen und Klassifizieren. Er findet erfundene Beträge, falsche Belegtypen und Dokumente, die gar nicht in die Buchhaltung gehören."
 tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 model: opus
 memory: project
 maxTurns: 40

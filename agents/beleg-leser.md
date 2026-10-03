@@ -2,6 +2,7 @@
 name: beleg-leser
 description: "Liest Eingangs- und Ausgangsbelege (PDF, Bild, XRechnung/ZUGFeRD) und extrahiert die umsatzsteuerlich relevanten Felder in strukturierter Form. Nutze diesen Agenten, wenn Belege eines Zeitraums ausgewertet werden sollen — er liest viele Dokumente und gibt eine kompakte Zeile je Beleg zurück. Er bewertet nicht und bucht nicht."
 tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 model: sonnet
 memory: project
 maxTurns: 60

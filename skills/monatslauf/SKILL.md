@@ -11,23 +11,58 @@ Nutzer fragen; genau deshalb ist das hier eine Skill und kein Subagent.
 
 ## Vorbedingungen
 
-`.claude/docs/COMPANY_CONTEXT.md` muss existieren. Fehlt sie, brich ab und verweise auf
-`/buchhaltung-kit:adopt`.
+**Dieser Lauf gehört ins Mandantenprojekt**, nicht ins Plugin-Repo. Er liest und schreibt
+unter `.claude/` des Mandanten.
+
+Suche `.claude/docs/COMPANY_CONTEXT.md` **relativ zum Arbeitsverzeichnis**. Fehlt sie,
+unterscheide zwei Lagen, bevor du etwas behauptest:
+
+- Es gibt sie nirgends → der Mandant ist nicht eingerichtet → `/buchhaltung-kit:adopt`.
+- Du stehst im falschen Verzeichnis (etwa im Plugin-Repo) → **sag das**, nenne den Pfad, den
+  du geprüft hast, und frag nach dem Mandantenprojekt. Auf `adopt` zu verweisen wäre hier
+  falsch und würde einen bestehenden Context überschreiben.
 
 Erstes Argument ist der Zeitraum (`YYYY-MM`, bei Quartalsmeldung der erste Monat des
 Quartals). `--trocken` überspringt Phase 4.
 
 ## Phase 0 — Vorlauf
 
-1. Zeitraum und Modus festhalten.
-2. `COMPANY_CONTEXT.md` lesen. **Besteuerungsart, Turnus und Dauerfristverlängerung gegen das
+**Lege das Laufverzeichnis zuerst an, nicht zuletzt.** Ein Lauf, der in Schritt 3 abbricht,
+muss eine Spur hinterlassen — sonst ist später nicht nachvollziehbar, dass und warum er
+versucht wurde.
+
+1. Laufverzeichnis `.claude/buchhaltung-log/<zeitraum>/` anlegen und `00-lauf.md` beginnen:
+   Zeitraum, Modus, Startzeit. Alles Weitere wird **angehängt**, auch ein Abbruch.
+2. Zeitraum und Modus festhalten.
+3. `COMPANY_CONTEXT.md` lesen. **Besteuerungsart, Turnus und Dauerfristverlängerung gegen das
    System prüfen** — nicht nur die Datei glauben. Ändert sich eines davon, ist das ein
    Befund, bevor irgendetwas gerechnet wird (G-01).
-3. Meldestatus prüfen: Ist der Zeitraum schon übermittelt? Dann ist dies ein
-   Korrekturvorgang → auf `/buchhaltung-kit:korrektur` verweisen und abbrechen.
-4. `REGELWERK_VERSION` aus Plugin und Context vergleichen. Drift melden.
-5. Laufverzeichnis `.claude/buchhaltung-log/<zeitraum>/` anlegen, `00-lauf.md` schreiben:
-   Zeitraum, Modus, Besteuerungsart, Regelwerk-Version, Startzeit.
+4. Meldestatus prüfen: Ist der Zeitraum schon übermittelt? Dann ist dies ein
+   Korrekturvorgang → Abbruchgrund **in `00-lauf.md` festhalten**, auf
+   `/buchhaltung-kit:korrektur` verweisen und abbrechen.
+5. `REGELWERK_VERSION` aus Plugin und Context vergleichen. Drift melden — und zwar mit
+   beiden Ständen und dem Hinweis, dass Regeln nur ab ihrem `gilt_ab` wirken.
+
+   Verlass dich dabei **nicht** auf den Sitzungsstart-Hook. Er meldet Drift nur, wenn die
+   Sitzung mit installiertem Plugin beginnt; wird das Plugin mitten in der Sitzung
+   installiert oder aktualisiert, hat er längst gelaufen. Die Prüfung hier ist die
+   verlässliche.
+
+   Drift ist **nicht blockierend**. Fast alle Regeln gelten rückwirkend ab 2020 — ein Lauf
+   unter einer neueren Fassung kann für denselben Zeitraum ein anderes Ergebnis liefern als
+   der alte. Genau dafür gibt es den Trockenlauf gegen einen bereits gebuchten Monat
+   (`docs/TROCKENLAUF.md`). Nenne die seit der Mandantenversion hinzugekommenen Regel-IDs,
+   damit erkennbar ist, was sich geändert haben kann.
+
+### Im laufenden Betrieb ist der Monatslauf der Ausnahmefall
+
+Ist die Buchhaltung aktuell, sind alle vergangenen Zeiträume übermittelt und `monatslauf`
+greift nur für den **laufenden** Zeitraum. Jede Aufarbeitung der Vergangenheit — ein
+nachträglich gefundener Beleg, eine korrigierte Behandlung, ein nie gebuchter Sachverhalt —
+läuft über `korrektur`, nicht hierüber.
+
+Das ist keine Einschränkung, sondern die Trennlinie: `monatslauf` bereitet eine Meldung vor,
+`korrektur` ändert eine abgegebene. Wer das vermischt, meldet versehentlich neu.
 
 ## Phase 1 — Sammeln
 
@@ -142,6 +177,16 @@ Zu klären    <gemeldete, nicht blockierende Abweichungen>
 
 Schließe mit dem ausdrücklichen Hinweis: **Es wurde nichts übermittelt.** Die Übermittlung
 ist allein Sache des Menschen (P-01).
+
+### Regelwerksversion nachziehen
+
+Lief der Lauf **vollständig** durch und wurde die Drift aus Phase 0 vom Nutzer zur Kenntnis
+genommen, schlage vor, `REGELWERK_VERSION` in `COMPANY_CONTEXT.md` auf den Plugin-Stand zu
+setzen. Ohne das steht die Drift bei jedem künftigen Lauf erneut im Bericht und wird zum
+Rauschen, das man wegliest.
+
+Ziehe sie **nicht** selbstständig nach und **nicht** nach einem abgebrochenen Lauf: Die
+Version sagt aus, gegen welches Regelwerk zuletzt tatsächlich gerechnet wurde.
 
 ## Haltung
 

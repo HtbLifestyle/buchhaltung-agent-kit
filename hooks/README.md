@@ -45,6 +45,12 @@ Ergebnis nicht. Ob ein Beleg tatsächlich angelegt wurde, zeigt erst der Bestand
 | `spur-navigation.py` | schreibt jede Navigation nach `.claude/buchhaltung-log/navigation.jsonl` — die Grundlage, auf der das Audit prüfen kann, dass nichts übermittelt wurde |
 | `sitzungsstart.py` | meldet Versionsdrift zwischen Regelwerk im Plugin und dem Stand, gegen den der Mandant zuletzt gerechnet hat |
 
+**Grenze von `SessionStart`:** Der Hook läuft einmal beim Sitzungsbeginn. Wird das Plugin
+**mitten in einer Sitzung** installiert oder aktualisiert, ist er längst gelaufen und meldet
+nichts — die Drift bleibt unbemerkt, obwohl sie besteht. Deshalb prüft `monatslauf` die
+Version in Phase 0 zusätzlich selbst. Ein Hook, dessen einziger Auslöser vor dem Ereignis
+liegt, ist keine Absicherung.
+
 Beide blockieren nie und fangen jeden Fehler ab. Ein Protokoll-Hook, der einen Lauf aufhält,
 ist schlimmer als kein Protokoll.
 

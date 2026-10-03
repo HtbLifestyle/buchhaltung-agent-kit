@@ -2,6 +2,7 @@
 name: steuer-klassifizierer
 description: "Ordnet ausgelesenen Belegdaten die umsatzsteuerliche Behandlung zu — Inlandsvorsteuer, Reverse Charge, innergemeinschaftlicher Erwerb oder kein Vorsteuerabzug — und nennt dabei immer die angewandte Regel. Nutze diesen Agenten nach dem Auslesen und vor dem Erfassen. Er bucht nicht."
 tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 skills: regelwerk
 model: opus
 memory: project

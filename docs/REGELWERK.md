@@ -566,6 +566,6 @@ Fachliche Zuordnung:
 | 1 | 2026-10 | Erstfassung, abgeleitet aus einem realen Monatslauf |
 | 2 | 2026-10 | G-07 ergänzt sowie G-08, G-09, B-05 und E-05 `satz_nicht_vom_beleg` aufgenommen — alle vier aus Befunden eines Trockenlaufs gegen einen bereits gebuchten Monat |
 | 3 | 2026-10 | Zweiter Trockenlauf gegen einen anderen Monat: E-15 (Reverse Charge ohne Hinweis) und E-16 (ein Lieferant, eine Behandlung) neu; E-01 um das Verbot des Regelsatz-Defaults, E-02 um die getrennte Erfassung mehrerer Sätze und G-08 um Zeilenumbruch und qualifizierte Label erweitert |
-| 4 | 2026-10 | B-06 aufgenommen: eine Datei kann mehrere Rechnungen enthalten. Gefunden beim Wiederholungslauf desselben Monats — eine Sammeldatei mit mehrere Rechnungen wurde als ein Beleg gelesen |
+| 4 | 2026-10 | B-06 aufgenommen: eine Datei kann mehrere Rechnungen enthalten. Gefunden beim Wiederholungslauf desselben Monats — eine Sammeldatei mit mehreren Rechnungen wurde als ein Beleg gelesen |
 | 5 | 2026-10 | Nachlauf zum zweiten Monat: G-10 (Vorzeichen/Gutschrift), B-07 (Datum am Label, nie stilles Verwerfen) und E-17 (Ansässigkeit aus der Anschrift) aufgenommen |
 | 6 | 2026-10 | Dritter Monat: E-18 (Lieferanteneigenschaften gelten belegübergreifend) und G-11 (Währung am Betrag) neu; E-16 um die Wahl des Gruppierungsschlüssels geschärft — eine Prüfung, die auf einem Feld gruppiert, das fehlen kann, meldet null Befunde |

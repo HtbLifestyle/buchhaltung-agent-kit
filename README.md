@@ -37,8 +37,8 @@ Klick in einer Oberfläche enthält nur Koordinaten. Das ist offengelegt statt �
 ## Installation
 
 ```bash
-/plugin marketplace add ChristianEichmueller/buchhaltung-agent-kit
-/plugin install buchhaltung-kit
+/plugin marketplace add MakeNative/buchhaltung-agent-kit
+/plugin install buchhaltung-kit@buchhaltung-agent-kit
 ```
 
 Danach im Mandantenprojekt:

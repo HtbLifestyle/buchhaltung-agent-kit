@@ -10,8 +10,7 @@ bedient beliebig viele Unternehmen.
 
 > Status: **vollständig angelegt** (v0.2.0). Alle Phasen, Gates, Hooks und Agenten sind
 > beschrieben. Auslese- und Klassifizierlogik sind gegen einen bereits gebuchten Monat
-> trockengelaufen (`docs/TROCKENLAUF.md`); die Schreibphase ist noch nicht im Echtbetrieb
-> erprobt.
+> trockengelaufen (`docs/TROCKENLAUF.md`); 
 
 ---
 

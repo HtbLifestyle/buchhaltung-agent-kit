@@ -68,7 +68,7 @@ Rechnungs-/Lieferdatum
 18.09.2026
 
                                         Gesamtbetrag netto:          -50,00 €
-                                        MwSt.:   19%                 -9,50 €
+                                        MwSt.:   19%                  -9,50 €
                                          Gesamtbetrag
 
                                                                      -59,50 €
@@ -82,8 +82,8 @@ Rechnungsnummer DE600MUSTER1
                                                               Zahlbetrag      21,29 €
 
  Beschreibung                                    Menge   Stückpreis    USt. %   Zwischensumme
- $100 Muster-Titel: Wie Zahlen Lesen               1      19,90 €        7%        21,29 €
-                                      USt. Gesamt                19,90 €     1,75 €
+ $100 Muster-Titel: Wie Zahlen Lesen                 1      19,90 €        7%        21,29 €
+                                      USt. Gesamt                19,90 €     1,39 €
 """
 
 # E-01: Inlandsbeleg, der ausschliesslich 0 % ausweist
@@ -221,7 +221,7 @@ def _():
 
 @fall("G-10 Gutschrift behaelt ihr Vorzeichen")
 def _():
-    assert gesamtbetrag(GUTSCHRIFT) == -74.97, gesamtbetrag(GUTSCHRIFT)
+    assert gesamtbetrag(GUTSCHRIFT) == -59.50, gesamtbetrag(GUTSCHRIFT)
 
 @fall("G-10 Gutschrift wird als solche erkannt")
 def _():

@@ -115,8 +115,8 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   im Zeitraum der Änderung (A-03).
 - **folge_fehler:** Ohne Vorzeichen wird die Gutschrift zur Ausgabe — der Fehler verdoppelt
   sich, weil der Betrag nicht nur fehlt, sondern mit falschem Vorzeichen hinzukommt.
-- **belegt:** Zwei Gutschriften eines Monats über −59,50 € und −120,00 € wurden als positive
-  Eingangsrechnungen gelesen. Wirkung auf die Vorsteuer: 60,00 € statt −30,00 €.
+- **belegt:** Mehrere Gutschriften eines Monats wurden als positive Eingangsrechnungen
+  gelesen. Die Vorsteuer kehrte dadurch ihr Vorzeichen um, statt sich zu mindern.
 - **auswahl:** Enthält eine Zeile mehrere Beträge, ist der betragsmäßig **größte** maßgeblich
   — mit erhaltenem Vorzeichen. Ein Maximum ohne Vorzeichenbetrachtung wählt bei Gutschriften
   die Null.
@@ -130,7 +130,7 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **folge_fehler:** Die Folge ist nicht nur ein falsches Feld: Der Beleg wandert in die
   Umrechnung (F-01), verlangt einen Kurs, den es nicht braucht, und blockiert den Lauf mit
   einer Frage, die auf einem Lesefehler beruht.
-- **belegt:** Zwei Inlandsrechnungen eines Monats wurden so zu Fremdwährungsbelegen und
+- **belegt:** Mehrere Inlandsrechnungen eines Monats wurden so zu Fremdwährungsbelegen und
   fielen zugleich aus der Summenbildung der Inlandsvorsteuer.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
 
@@ -175,7 +175,7 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **pruefung:** Nur ein Satz, zu dem ein Steuerbetrag **ungleich null** gehört, ist wirksam.
   Rechnungsvorlagen führen regelmäßig eine ermäßigte Zeile mit `0,00` mit, ohne dass ein
   ermäßigter Umsatz vorliegt.
-- **belegt:** In einem realen Monat wiesen die meisten Inlandsbelege ausschließlich 0 % aus
+- **belegt:** In einem realen Monat wies die Mehrheit der Inlandsbelege ausschließlich 0 % aus
   (Parkgebühren). Ein Default auf den Regelsatz hätte Vorsteuer aus dem Nichts gezogen —
   der einzige Fehlertyp in diesem Regelwerk, der nicht formell, sondern materiell ist.
 - gilt_ab: 2020-01-01 · wert_pruefen: nein
@@ -250,7 +250,7 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
 - **grenze:** Lässt sich die Ansässigkeit des Leistenden nicht feststellen, ist die Zuordnung
   zu EU oder Drittland **offen** (`§13b_verdacht`) und wird vorgelegt. Die Kennziffern
   unterscheiden sich, die Zahllast nicht.
-- **belegt:** In einem realen Monat trugen einige Reverse-Charge-Belege keinen
+- **belegt:** In einem realen Monat trug ein Teil der Reverse-Charge-Belege keinen
   Hinweis — darunter einer von einem Lieferanten, dessen übrige Rechnungen desselben Monats
   ihn trugen. Eine Erkennung über den Wortlaut hätte sie als nicht abzugsfähige Ausgaben
   behandelt.
@@ -267,7 +267,7 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   Fälle durch, die sie finden soll. Fehlt die USt-IdNr. auf einem Beleg, bildet dieser Beleg
   eine eigene Gruppe von eins — und eine Gruppe mit einem Element ist nie uneinheitlich. Der
   Prüfbericht meldet dann null Befunde und sieht aus wie ein Erfolg.
-- **belegt:** Mehrere Belege eines Lieferanten verteilten sich in einem Monat auf drei
+- **belegt:** Die Belege eines einzigen Lieferanten verteilten sich in einem Monat auf drei
   Behandlungen und zwei Länder. Die Prüfung meldete null Befunde, weil sie nach der USt-IdNr.
   gruppierte — und die stand nur auf einem von ihnen.
 - **folge:** Abweichung melden. Entweder unterscheidet sich der Sachverhalt tatsächlich
@@ -459,9 +459,9 @@ zurückliegenden Zeitraum verwendet die Regeln, die **damals** galten.
   Rechnungen können auf einer Seite stehen.
 - **folge_fehler:** Wer die Datei als einen Beleg liest, erfasst willkürlich **einen** der
   Vorgänge und verliert die übrigen — ohne Fehlermeldung, weil ein Betrag ja gefunden wurde.
-- **belegt:** In einem realen Monat bündelte eine Marktplatzdatei mehrere Rechnungen über
-  zusammen 80,00 €. Gelesen wurden 5,00 € — die zufällig letzte. 70,00 € Bemessungsgrundlage
-  und 10,00 € Vorsteuer fielen lautlos aus dem Lauf.
+- **belegt:** In einem realen Monat bündelte eine Marktplatzdatei mehrere Rechnungen.
+  Gelesen wurde nur eine — die zufällig letzte und zugleich betragsmäßig kleinste. Der
+  größte Teil von Bemessungsgrundlage und Vorsteuer fiel lautlos aus dem Lauf.
 - **dubletten:** Der Dublettenschlüssel ist dann **Dateihash plus Rechnungsnummer**. Über den
   Dateihash allein gelten die Teile einer zerlegten Sammeldatei fälschlich als Dubletten
   voneinander.
